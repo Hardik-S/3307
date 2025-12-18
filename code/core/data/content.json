@@ -1,0 +1,49 @@
+{
+  "exercises": [
+    {
+      "type": "MCQ",
+      "spec": {
+        "id": "mcq-001",
+        "prompt": "Which is the Hindi word for 'water'?",
+        "choices": ["पानी", "आग", "हवा", "मिट्टी"],
+        "correctIndex": 0
+      }
+    },
+    {
+      "type": "Translate",
+      "spec": {
+        "id": "tr-001",
+        "prompt": "Translate 'sun' to Hindi.",
+        "answers": ["सूरज", "सूर्य"],
+        "characterSelection": true
+      }
+    },
+    {
+      "type": "TileOrder",
+      "spec": {
+        "id": "tile-001",
+        "prompt": "Order the tiles to say: 'I learn Hindi'.",
+        "tiles": ["हिंदी", "सीखता", "मैं"],
+        "correctOrder": ["मैं", "हिंदी", "सीखता"]
+      }
+    },
+    {
+      "type": "Listen",
+      "spec": {
+        "id": "listen-001",
+        "prompt": "Listen and pick the correct translation.",
+        "audioPath": "assets/sample_audio.wav",
+        "choices": ["Thank you", "Hello", "Goodbye", "Please"],
+        "correctIndex": 1
+      }
+    },
+    {
+      "type": "Speak",
+      "spec": {
+        "id": "speak-001",
+        "prompt": "Say: 'Namaste'.",
+        "expectedKeyword": "namaste"
+      }
+    }
+  ]
+}
