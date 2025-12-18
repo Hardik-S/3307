@@ -1,0 +1,282 @@
+# Lecture 10: Creational Design Patterns (Part 2)
+**Lecture 10 — 10/8/2025**
+
+## Summary
+This lecture concludes the discussion on Creational Design Patterns. [cite_start]It primarily focuses on the **Prototype Pattern**, which creates new objects by cloning existing ones rather than instantiating them from scratch, which is useful for complex objects[cite: 2269, 2271]. [cite_start]The lecture contrasts this with **Copy Constructors** and introduces **Object Pooling** as a method to manage resource-heavy objects (like database connections) by recycling them[cite: 2566, 2630].
+
+The session also covers strategies for **combining design patterns** to solve complex problems. [cite_start]Examples include combining Factory with Builder to manage step-by-step assembly, and Abstract Factory with Prototype to handle families of objects with slight variations[cite: 2819, 2821].
+
+## Key Definitions, Formulas, or Arguments
+* **Prototype Pattern:** A pattern that uses a `clone()` method to copy an existing object. [cite_start]It avoids the cost of creating a new instance from scratch[cite: 2291].
+* [cite_start]**Deep vs. Shallow Copy:** Implied through the use of copy constructors and cloning logic to ensure distinct objects are created[cite: 2321].
+* **Object Pooling:** A technique where a pool of initialized objects is maintained. [cite_start]Clients `borrow` objects and `return` them, reducing creation/destruction overhead[cite: 2630].
+* **Pattern Combinations:**
+    * **Factory + Builder:** Factory selects the type; [cite_start]Builder handles customization[cite: 3183].
+    * **Abstract Factory + Prototype:** Factory creates a base prototype; [cite_start]Prototype clones it for variations (e.g., UI themes)[cite: 2855].
+
+## Diagram Insights
+* **None.** (The lecture relies heavily on code examples (C++) to demonstrate class structures rather than visual UML diagrams).
+
+## Questions/Next Steps
+* Review the specific syntax for the Copy Constructor in C++ as shown in the slides to ensure the difference between initialization and assignment is clear.
+* Clarify if the Object Pool implementation requires thread-safety for the final exam (not explicitly mentioned in the slides).
+
+## Cheat Sheet
+* **Cloning:** `Shape* clone() const = 0;` implies pure virtual function for Prototype.
+* **Pool:** Look for `std::vector<Object*>`, `borrow()`, and `return()` methods.
+* **Prototype vs. Copy Constructor:** Prototype is polymorphic (virtual clone); Copy Constructor is static to the class type.
+
+## Final Exam Key Insights
+* [cite_start]**When to use Prototype:** Use when object initialization is expensive or complex, and you need variations of an existing instance[cite: 2277].
+* [cite_start]**Object Pool Trade-off:** Saves time/resources (Pro) but adds code complexity and potential memory leaks if objects aren't returned (Con)[cite: 2802].
+
+## Potential Multiple Choice Questions
+1.  **Which pattern is best suited for creating new objects by copying an existing instance?**
+    * A) Builder
+    * B) Singleton
+    * C) Prototype
+    * D) Adapter
+    * [cite_start]*Answer: C* [cite: 2269]
+
+2.  **In the Object Pool pattern, what happens when a client is finished with an object?**
+    * A) The object is deleted from memory.
+    * B) The object is returned to the pool for reuse.
+    * C) The object is cloned.
+    * D) The object becomes a Singleton.
+    * [cite_start]*Answer: B* [cite: 2632]
+
+3.  **Why might you combine an Abstract Factory with a Prototype pattern?**
+    * A) To ensure only one instance of the factory exists.
+    * B) To allow the factory to produce clones of base objects for slight variations.
+    * C) To separate the construction of a complex object from its representation.
+    * D) To adapt an incompatible interface.
+    * [cite_start]*Answer: B* [cite: 2855]
+
+---
+
+# Lecture 11: Structural Design Patterns (Part 1)
+**Lecture 11 — 10/14/2025**
+
+## Summary
+This lecture introduces **Structural Design Patterns**, which focus on class and object composition. [cite_start]The primary focus is the **Adapter Pattern**, which bridges incompatible interfaces, allowing classes with different interfaces to work together[cite: 1224, 1235]. Real-world analogies provided include power adapters and legacy printer drivers.
+
+The lecture compares the Adapter pattern against other solutions like **Simple Refactoring** (changing the old code directly), **Multiple Inheritance**, and **Encapsulation**. [cite_start]It argues that the Adapter pattern is often superior for complying with the Open/Closed principle, especially when dealing with legacy or third-party code that cannot be modified[cite: 1333, 1565].
+
+## Key Definitions, Formulas, or Arguments
+* **Adapter Pattern:** Converts the interface of a class into another interface the client expects.
+* **Client:** The system expecting a specific interface (e.g., `Printer::print()`).
+* **Adaptee:** The existing incompatible class (e.g., `OldPrinter::printOld()`).
+* **Target:** The interface the client uses.
+* **Multiple Inheritance Approach:** A variation where the Adapter inherits from both the Target and the Adaptee. [cite_start]This is risky due to naming conflicts and tight coupling[cite: 1391].
+* [cite_start]**Encapsulation Approach:** Wraps the old object but may not fully implement the required polymorphism[cite: 1440].
+
+## Diagram Insights
+* **None.** (The lecture uses C++ code blocks to illustrate the "Incompatibility" errors and the structure of the Adapter classes rather than visual UML diagrams).
+
+## Questions/Next Steps
+* Practice implementing the Adapter pattern using object composition (holding a pointer to the old object) rather than multiple inheritance, as this is generally preferred.
+
+## Cheat Sheet
+* **Adapter:** "Wrapper."
+* **Problem:** Incompatible interfaces.
+* **Solution:** Create a class that implements the *New* interface and calls the *Old* interface internally.
+* **Key benefit:** Reuse legacy code without changing it.
+
+## Final Exam Key Insights
+* **Adapter vs. Refactoring:** You cannot refactor 3rd party libraries or legacy code you don't own; [cite_start]Adapter is the only choice there[cite: 1594].
+* [cite_start]**Compliance:** Adapters help systems adhere to new standards (interfaces) while keeping old hardware/software running[cite: 1573].
+
+## Potential Multiple Choice Questions
+1.  **What is the primary purpose of the Adapter Pattern?**
+    * A) To create a single instance of a class.
+    * B) To convert one interface to another compatible one.
+    * C) To add behavior to an object dynamically.
+    * D) To separate abstraction from implementation.
+    * [cite_start]*Answer: B* [cite: 1224]
+
+2.  **Why is the "Simple Refactoring" approach sometimes impossible?**
+    * A) It requires too much memory.
+    * B) It violates the Singleton pattern.
+    * C) You may not have access to the source code (e.g., 3rd party library).
+    * D) It is slower than using an Adapter.
+    * [cite_start]*Answer: C* [cite: 1333]
+
+3.  **Which design principle does the Adapter pattern supports by allowing new printers to be added without changing client code?**
+    * A) Single Responsibility Principle.
+    * B) Open/Closed Principle.
+    * C) Liskov Substitution Principle.
+    * D) Interface Segregation Principle.
+    * [cite_start]*Answer: B* [cite: 1565]
+
+---
+
+# Lecture 12: Structural Design Patterns (Part 2)
+**Lecture 12 — 10/15/2025**
+
+## Summary
+This lecture covers the **Composite** and **Decorator** patterns. [cite_start]The **Decorator Pattern** allows behavior to be added to individual objects dynamically without affecting the behavior of other objects from the same class, serving as a flexible alternative to subclassing (which leads to "class explosion")[cite: 772, 576]. The example used is a coffee ordering system where ingredients (milk, sugar) are decorators.
+
+The **Composite Pattern** is introduced for managing tree structures. [cite_start]It treats individual objects (Leaves) and compositions of objects (Composites) uniformly[cite: 925]. A file system (Files and Folders) is used as the primary example, showing how recursive structures can be managed with a single interface.
+
+## Key Definitions, Formulas, or Arguments
+* **Decorator Pattern:** Wraps an object to add behavior. [cite_start]It uses a "Has-a" relationship (composition) to extend functionality dynamically[cite: 775].
+* [cite_start]**Class Explosion:** The problem solved by Decorator, where using inheritance for every combination (e.g., `MilkAndSugarCoffee`) creates too many subclasses[cite: 576].
+* **Composite Pattern:** Composes objects into tree structures to represent part-whole hierarchies.
+* **Leaf:** An element with no children (e.g., File).
+* **Composite:** An element that has children (e.g., Folder).
+* [cite_start]**Uniformity:** The key benefit of Composite; clients treat Leaves and Composites the same way[cite: 1151].
+
+## Diagram Insights
+* **None.** (While the text describes a "file system structure" and "tree hierarchies," the slides provided use indented text output and C++ code to visualize the hierarchy rather than a drawn diagram).
+
+## Questions/Next Steps
+* Review the recursion logic in the Composite pattern (how `showDetails` is called on children).
+* Differentiate clearly between "Inheritance" (is-a) and "Decorator" (wraps-a) for the exam.
+
+## Cheat Sheet
+* **Decorator:** "Wrapper." Adds responsibilities. Prevents class explosion.
+* **Composite:** "Tree." Part-Whole hierarchy. Uniform interface (`showDetails()`).
+* **Key Distinction:** Decorator adds *behavior*; Composite manages *structure*.
+
+## Final Exam Key Insights
+* [cite_start]**Decorator vs. Subclassing:** Decorators provide runtime flexibility; subclassing is static at compile time[cite: 578].
+* [cite_start]**Composite Complexity:** Operations on large Composite trees can be slow due to recursion[cite: 1159].
+
+## Potential Multiple Choice Questions
+1.  **Which problem does the Decorator pattern solve?**
+    * A) Incompatible interfaces.
+    * B) Class explosion due to excessive subclassing for combinations.
+    * C) Memory leaks in object creation.
+    * D) Managing tree structures.
+    * [cite_start]*Answer: B* [cite: 576]
+
+2.  **In the Composite pattern, what is a "Leaf"?**
+    * A) An object that contains other objects.
+    * B) The root of the tree.
+    * C) An object with no children.
+    * D) An interface for the component.
+    * [cite_start]*Answer: C* [cite: 934]
+
+3.  **What is a disadvantage of the Decorator pattern?**
+    * A) It is hard to add new behaviors.
+    * B) It requires altering the existing structure.
+    * C) It can result in many small objects and be order-sensitive.
+    * D) It prevents code reuse.
+    * [cite_start]*Answer: C* [cite: 914]
+
+---
+
+# Lecture 13: Structural Design Patterns (Part 3)
+**Lecture 13 — 10/20/2025**
+
+## Summary
+This lecture details the **Proxy** and **Façade** patterns. The **Proxy Pattern** provides a surrogate or placeholder for another object to control access to it. [cite_start]Uses include lazy initialization (Virtual Proxy), access control (Protection Proxy), and logging[cite: 58, 63]. The example is an image viewer that only loads heavy images from disk when they are actually displayed.
+
+The **Façade Pattern** provides a simplified interface to a complex subsystem (e.g., a Home Theater system with many devices). [cite_start]It hides complexity and decouples the client from the subsystem components[cite: 213, 223].
+
+## Key Definitions, Formulas, or Arguments
+* **Proxy Pattern:** Controls access. Can delay object creation (Lazy Initialization).
+    * [cite_start]*Virtual Proxy:* Manages lazy initialization[cite: 64].
+    * [cite_start]*Protection Proxy:* Controls permissions[cite: 65].
+* **Façade Pattern:** Simplifies interface. [cite_start]"Universal Remote" analogy[cite: 228].
+* **Adapter vs. Façade:** Adapter makes interfaces compatible; [cite_start]Façade makes interfaces simpler[cite: 439].
+
+## Diagram Insights
+* **Slide 4 (Comparisons Pattern):**
+    * *Description:* A comparative UML view of Decorator, Composite, and Proxy patterns.
+    * *Decorator:* Shows `ConcreteDecorator` wrapping a `Component`.
+    * *Composite:* Shows `Composite` containing a list of `Component` (self-reference).
+    * *Proxy:* Shows `Proxy` and `Service` both implementing `ServiceInterface`. The `Proxy` holds a reference (`realService`) to the `Service`.
+    * *Significance:* This diagram visually distinguishes the structure: Decorator wraps for features, Composite wraps for hierarchy, Proxy wraps for access control.
+
+## Questions/Next Steps
+* Ensure you can identify a Proxy in code by looking for the "checkAccess" or "if null then load" logic.
+* Review the distinction between Proxy and Decorator—they look similar structurally but have different *intents* (Control vs. Enhanced Behavior).
+
+## Cheat Sheet
+* **Proxy:** "Placeholder." Access control, Lazy loading.
+* **Façade:** "Simplified Face." Hides complexity.
+* **Lazy Initialization:** `if (realObject == null) realObject = new Object();`
+
+## Final Exam Key Insights
+* [cite_start]**Proxy Use Case:** Use when an object is resource-intensive to create, and you might not need it immediately (Image loading)[cite: 81].
+* [cite_start]**Façade Benefit:** Reduces dependencies between client and complex subsystems (Decoupling)[cite: 433].
+
+## Potential Multiple Choice Questions
+1.  **Which type of Proxy handles "Lazy Initialization"?**
+    * A) Protection Proxy
+    * B) Virtual Proxy
+    * C) Remote Proxy
+    * D) Logging Proxy
+    * [cite_start]*Answer: B* [cite: 64]
+
+2.  **What is the main goal of the Façade Pattern?**
+    * A) To convert an interface.
+    * B) To add behavior dynamically.
+    * C) To simplify interactions with a complex subsystem.
+    * D) To save memory by sharing data.
+    * [cite_start]*Answer: C* [cite: 220]
+
+3.  **How does the Proxy pattern differ from the Facade pattern?**
+    * A) Proxy simplifies an interface; Facade controls access.
+    * B) Proxy controls access; Facade focuses on ease of use.
+    * C) Proxy allows dynamic behavior; Facade does not.
+    * D) They are identical.
+    * [cite_start]*Answer: B* [cite: 440]
+
+---
+
+# Lecture 14: Structural Design Patterns (Part 4)
+**Lecture 14 — 10/28/2025**
+
+## Summary
+The final structural patterns lecture covers **Bridge** and **Flyweight**. The **Bridge Pattern** decouples an abstraction from its implementation so the two can vary independently. [cite_start]It prevents a Cartesian product of subclass combinations (e.g., avoiding `SonyTV`, `SonyRadio`, `SamsungTV` classes)[cite: 1817].
+
+The **Flyweight Pattern** is a memory optimization pattern. It shares common parts of state (Intrinsic state) between multiple objects to reduce memory usage. [cite_start]It is demonstrated using a text editor where character fonts/sizes are shared, but positions are unique[cite: 2018].
+
+## Key Definitions, Formulas, or Arguments
+* **Bridge Pattern:** Splits inheritance into two hierarchies: Abstraction (Remote) and Implementation (Device).
+    * [cite_start]*Abstraction:* High-level control[cite: 1824].
+    * [cite_start]*Implementor:* Concrete underlying logic[cite: 1825].
+* **Flyweight Pattern:** Optimization for massive numbers of objects.
+    * [cite_start]*Intrinsic State:* Shared, read-only data (e.g., Font: Arial)[cite: 2112].
+    * [cite_start]*Extrinsic State:* Unique, context-specific data (e.g., Position X, Y)[cite: 2026].
+
+## Diagram Insights
+* **Slide 16 (Flyweight Pattern):**
+    * *Description:* A UML-style diagram showing the `FlyweightFactory` managing a cache of `Flyweight` objects. The `Client` interacts with `ConcreteFlyweight` via the factory.
+    * [cite_start]*Significance:* Illustrates how the factory checks a cache (`if cache[state] == null`) to return an existing object rather than creating a new one, visually proving the memory saving mechanism[cite: 2044].
+
+## Questions/Next Steps
+* For Bridge: Practice identifying the two dimensions of variation (e.g., Shape vs. Color, or Remote vs. Device) to determine where to apply the "bridge."
+* For Flyweight: Be able to distinguish between Intrinsic (shared) and Extrinsic (unique) state in a given scenario.
+
+## Cheat Sheet
+* **Bridge:** "Decouple." Two hierarchies. `Abstraction` has a `Implementor`.
+* **Flyweight:** "Cache/Share." Save RAM. Intrinsic (Shared) vs. Extrinsic (Unique).
+
+## Final Exam Key Insights
+* [cite_start]**Bridge Advantage:** Supports the Open/Closed Principle; you can add new Remotes or new Devices without breaking the other side[cite: 2004].
+* [cite_start]**Flyweight Constraint:** Only useful when you have a *massive* number of similar objects; adds complexity otherwise[cite: 2241].
+
+## Potential Multiple Choice Questions
+1.  **The Bridge pattern is useful when:**
+    * A) You want to simplify a complex interface.
+    * B) You want to decouple an abstraction from its implementation.
+    * C) You want to restrict access to an object.
+    * D) You need to copy objects efficiently.
+    * [cite_start]*Answer: B* [cite: 1817]
+
+2.  **In the Flyweight pattern, what is "Intrinsic State"?**
+    * A) State that is unique to every object.
+    * B) State that changes at runtime.
+    * C) State that is shared among multiple objects.
+    * D) State that handles database connections.
+    * [cite_start]*Answer: C* [cite: 2082]
+
+3.  **Which component in the Flyweight pattern manages the pool of shared objects?**
+    * A) Client
+    * B) ConcreteFlyweight
+    * C) FlyweightFactory
+    * D) Context
+    * [cite_start]*Answer: C* [cite: 2025]

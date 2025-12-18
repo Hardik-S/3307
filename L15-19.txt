@@ -1,0 +1,301 @@
+# Lecture 15: Iterator Pattern
+**Date:** 10/29/2025
+**Lecture:** 15
+
+## Summary
+This lecture introduces **Behavioral Design Patterns**, specifically focusing on the **Iterator Pattern**. Behavioral patterns are designed to manage communication and interaction between objects, promoting flexibility and reducing dependencies.
+
+The lecture contrasts **Direct Access Iteration** (where the client manually loops over a collection's internal structure, e.g., a vector) with the **Iterator Pattern**. The Iterator Pattern provides a standard interface to traverse a collection sequentially without exposing its underlying representation. This decoupling allows the underlying data structure to change without breaking client code.
+
+## Key Definitions, Formulas, or Arguments
+* **Behavioral Design Patterns:** Focus on object interaction and responsibility delegation. Examples include Iterator, Observer, Strategy, and Command.
+* **Direct Access Iteration:** The client accesses elements via index (e.g., `songs[i]`). This creates **tight coupling** between the client and the specific collection type (e.g., `std::vector`).
+* **Iterator Pattern:** An object used to traverse a collection element-by-element.
+    * **Uniform Interface:** typically includes `hasNext()` (checks for more elements) and `next()` (returns element and advances).
+    * **Lazy Evaluation:** Can fetch elements only when needed, optimizing memory.
+* **C++ STL Iterators:** The standard library uses iterators extensively (`begin()`, `end()`, `*it` to dereference).
+* **Iterable Interface:** A collection class (like `Playlist`) implements this to provide an iterator via a method like `getIterator()`.
+
+## Diagram Insights
+* **None.** (The lecture uses code examples to illustrate the structure rather than visual diagrams).
+
+## Cheat Sheet Section
+* **Iterator Interface:** `hasNext()`, `next()`.
+* **Iterable Interface:** `getIterator()`.
+* **Pros:** Hides complexity, supports different traversal types, decouples client from data structure.
+* **Cons:** Adds complexity (extra classes), slight performance overhead due to method calls.
+
+## Final Exam Key Insights
+* **Coupling:** The primary reason to use Iterator is to **decouple** the traversal logic from the data storage logic. If you change the storage from `vector` to `list`, the client code using the iterator usually doesn't need to change.
+* **STL Compatibility:** Be prepared to recognize standard C++ iterator syntax (`container.begin()`, `++it`, `*it`) as an implementation of this pattern.
+
+## Potential Multiple Choice Questions
+1.  **What is the main disadvantage of Direct Access Iteration compared to the Iterator Pattern?**
+    * A) It is slower.
+    * B) It exposes the internal structure of the collection to the client.
+    * C) It cannot handle arrays.
+    * D) It requires more memory.
+    * **Answer: B**
+
+2.  **Which method in the Iterator interface typically advances the cursor to the next element?**
+    * A) `hasNext()`
+    * B) `current()`
+    * C) `next()`
+    * D) `reset()`
+    * **Answer: C**
+
+3.  **The Iterator pattern is classified as which type of design pattern?**
+    * A) Creational
+    * B) Structural
+    * C) Behavioral
+    * D) Architectural
+    * **Answer: C**
+
+## Questions/Next Steps
+* Review how to implement `operator++` and `operator*` if asked to create a C++ STL-compliant iterator manually.
+
+---
+
+# Lecture 16: Command Pattern
+**Date:** 11/10/2025
+**Lecture:** 16
+
+## Summary
+This lecture details the **Command Design Pattern**, contrasting it with the **Direct Invocation Approach**. In direct invocation, an object (like a Remote Control) is tightly coupled to the devices it controls (Lights, Fans), calling their methods directly. This makes the system hard to extend and maintain.
+
+The Command Pattern solves this by encapsulating a request as an object. It introduces four key roles: the **Invoker** (Remote), the **Command** (interface and concrete implementations like `LightOnCommand`), the **Receiver** (Device like Light/Fan), and the **Client** (setup code). This allows for queuing requests, undo/redo operations, and adding new devices without modifying the Invoker.
+
+## Key Definitions, Formulas, or Arguments
+* **Direct Invocation Cons:**
+    * **Tight Coupling:** Invoker must know specific methods of the Receiver.
+    * **SRP Violation:** Invoker manages both execution logic and device specifics.
+    * **Low Extensibility:** Adding a "TV" requires changing the "Remote" code.
+* **Command Pattern Roles:**
+    * **Command Interface:** Declares `execute()`.
+    * **Concrete Command:** Implements `execute()`; holds a reference to a Receiver and calls the receiver's specific method (e.g., `light->turnOn()`).
+    * **Receiver:** The object doing the actual work (e.g., `Light`, `Fan`).
+    * **Invoker:** Holds the command and calls `command->execute()` (e.g., `RemoteControl`).
+    * **Client:** Wires everything together (creates Receiver, creates Command with Receiver, assigns Command to Invoker).
+
+## Diagram Insights
+* **None.** (The interactions are described through code flow and roles, no specific UML diagram was present in the slides).
+
+## Cheat Sheet Section
+* **Core Method:** `execute()` (and often `undo()`).
+* **Key Benefit:** Decouples the object that invokes the operation from the one that knows how to perform it.
+* **Use Cases:** Remote controls, GUI buttons, Macro recording, Undo/Redo systems.
+
+## Final Exam Key Insights
+* **Dependency Injection:** Note how the Receiver is injected into the Concrete Command's constructor. The Invoker never sees the Receiver.
+* **Open/Closed Principle:** The Command pattern strictly adheres to this; you can add new commands without changing the Invoker's code.
+
+## Potential Multiple Choice Questions
+1.  **In the Command Pattern, which component is responsible for knowing *how* to perform the actual operation?**
+    * A) The Invoker
+    * B) The Command Interface
+    * C) The Receiver
+    * D) The Client
+    * **Answer: C**
+
+2.  **Which of the following is NOT a benefit of the Command Pattern?**
+    * A) Undo/Redo capability
+    * B) Reduced number of classes
+    * C) Decoupling of invoker and receiver
+    * D) Easy addition of new commands
+    * **Answer: B** (It actually increases the number of classes).
+
+3.  **How does the Invoker trigger an action?**
+    * A) It calls the Receiver's method directly.
+    * B) It calls the `execute()` method on the Command object.
+    * C) It creates a new instance of the Receiver.
+    * D) It queries the Client.
+    * **Answer: B**
+
+## Questions/Next Steps
+* Review how to implement an `undo()` method for the commands (e.g., `LightOnCommand.undo()` would call `light->turnOff()`).
+
+---
+
+# Lecture 17: Observer & Strategy Patterns
+**Date:** 11/13/2025
+**Lecture:** 17
+
+## Summary
+This lecture covers two major patterns: **Observer** and **Strategy**.
+The **Observer Pattern** creates a one-to-many dependency where a "Subject" (e.g., WeatherStation) notifies multiple "Observers" (e.g., PhoneDisplay) automatically when its state changes. This is superior to traditional polling or tight coupling because observers can be added/removed dynamically.
+
+The **Strategy Pattern** defines a family of algorithms, encapsulates each one, and makes them interchangeable. It allows a class (Context) to change its behavior at runtime (e.g., a Duck changing from "LoudQuack" to "MuteQuack"). This avoids monolithic designs filled with conditional (if/else) logic for different behaviors.
+
+## Key Definitions, Formulas, or Arguments
+* **Observer Pattern:**
+    * **Subject:** Maintains list of observers; `registerObserver()`, `removeObserver()`, `notifyObservers()`.
+    * **Observer:** Implements `update()` to receive data.
+    * **Key Principle:** "Push" model (Subject pushes updates) vs. "Pull" (Observer requests data).
+* **Strategy Pattern:**
+    * **Context:** Has a reference to a Strategy interface.
+    * **Strategy Interface:** Defines the abstract algorithm (e.g., `fly()`, `quack()`).
+    * **Concrete Strategy:** Implements the specific algorithm.
+    * **Benefits:** Replaces inheritance with composition; Open/Closed Principle compliant.
+
+## Diagram Insights
+* **Page 37 (Strategy Pattern UML):** Shows a **Context** class pointing to a **Strategy** interface (aggregation). The Strategy interface is implemented by **ConcreteStrategyA**, **B**, and **C**.
+    * *Significance:* This illustrates the core structure of the pattern: the Context depends on the abstraction (Interface), not the concrete implementation, allowing the implementation to be swapped at runtime.
+
+## Cheat Sheet Section
+* **Observer:** "Don't call us, we'll call you." (Event handling, News feeds).
+* **Strategy:** "Composition over Inheritance." (Sorting algorithms, Payment methods, Enemy behaviors).
+* **Observer vs Traditional:** Traditional = rigid, hardcoded notification calls. Observer = dynamic list of subscribers.
+* **Strategy vs Monolith:** Monolith = massive `if/else` chains. Strategy = polymorphic calls.
+
+## Final Exam Key Insights
+* **Runtime Flexibility:** Both patterns excel at runtime changes. Observers subscribe/unsubscribe at runtime; Strategies are swapped at runtime.
+* **Scalability:** If asked how to fix a "God Class" with too many `if (type == x)` checks, the answer is likely the Strategy Pattern.
+
+## Potential Multiple Choice Questions
+1.  **In the Observer Pattern, what happens when the Subject's state changes?**
+    * A) It creates a new Observer.
+    * B) It iterates through its list of Observers and calls `update()`.
+    * C) It waits for Observers to poll for data.
+    * D) It disconnects all Observers.
+    * **Answer: B**
+
+2.  **Which design principle is the primary driver for the Strategy Pattern?**
+    * A) Singleton usage
+    * B) Inheritance over Composition
+    * C) Composition over Inheritance
+    * D) Tight Coupling
+    * **Answer: C**
+
+3.  **If you have a class `Duck` with a method `performQuack()`, which calls `quackBehavior->quack()`, what pattern is being used?**
+    * A) Observer
+    * B) Strategy
+    * C) Command
+    * D) Iterator
+    * **Answer: B**
+
+## Questions/Next Steps
+* Clarify if the implementation of Observer requires a "Push" (sending data in `update(data)`) or "Pull" (sending reference in `update(subject)`) model for the exam.
+
+---
+
+# Lecture 18: State Pattern
+**Date:** 11/17/2025
+**Lecture:** 18
+
+## Summary
+The **State Pattern** allows an object to change its behavior dynamically when its internal state changes. It makes the object appear to change its class. The lecture uses a **Vending Machine** example, which transitions between states like `IdleState`, `HasCoinState`, and `DispensingState`.
+
+Instead of a monolithic class with massive `switch` statements or `if-else` blocks checking the current state variable, the State Pattern encapsulates state-specific logic into separate classes. The Context (Vending Machine) delegates the behavior to the current State object.
+
+## Key Definitions, Formulas, or Arguments
+* **Context:** The main object (Vending Machine) that maintains a reference to the `CurrentState`.
+* **State Interface:** Defines methods for all possible actions (e.g., `insertCoin()`, `pressButton()`, `dispense()`).
+* **Concrete States:** Implement the interface. E.g., `IdleState::insertCoin()` transitions the context to `HasCoinState`.
+* **State Transitions:** can be controlled by the Context or the Concrete States themselves (the lecture example has Concrete States handling the transition via `machine->setState(...)`).
+
+## Diagram Insights
+* **None.** (The lecture uses code walkthroughs of the Vending Machine to illustrate the concept).
+
+## Cheat Sheet Section
+* **Core Idea:** Replace conditionals with polymorphism.
+* **Mechanism:** Context holds a pointer `State* currentState`. Actions are delegated: `currentState->action()`.
+* **Use Cases:** Vending machines, Game character states (Jump, Run, Idle), TCP connection states.
+
+## Final Exam Key Insights
+* **State vs Strategy:** They look similar (Context + Interface). *Difference:* In Strategy, the client usually chooses the strategy (algorithm). In State, the state transitions often happen internally based on actions, and the "strategy" (behavior) changes automatically as the state changes.
+* **Open/Closed:** Adding a new state (e.g., "OutOfStockState") is easy; you create a class and update transitions, minimizing changes to the Context.
+
+## Potential Multiple Choice Questions
+1.  **What is the primary motivation for using the State Pattern?**
+    * A) To save memory.
+    * B) To eliminate complex conditional logic (switch/if-else) related to object state.
+    * C) To allow clients to choose algorithms at runtime.
+    * D) To notify multiple objects of changes.
+    * **Answer: B**
+
+2.  **In the Vending Machine example, who is responsible for performing the specific action when a coin is inserted?**
+    * A) The Vending Machine class directly.
+    * B) The `main` function.
+    * C) The `CurrentState` object.
+    * D) The `Observer`.
+    * **Answer: C**
+
+3.  **If a Vending Machine is in `DispensingState` and `insertCoin()` is called, what determines the outcome?**
+    * A) A global switch statement.
+    * B) The `insertCoin()` implementation within the `DispensingState` class.
+    * C) The User.
+    * D) The Compiler.
+    * **Answer: B**
+
+## Questions/Next Steps
+* Review if the Context creates all states upfront (as seen in the lecture constructor) or if states are created/destroyed dynamically during transitions.
+
+---
+
+# Lecture 19: Chain of Responsibility, Template, & Testing
+**Date:** 11/19/2025 & 11/20/2025
+**Lecture:** 19
+
+## Summary
+This lecture covers two behavioral patterns and a significant section on Software Testing.
+The **Chain of Responsibility** passes a request along a chain of handlers (e.g., Tech Support levels: Basic -> Advanced -> Manager). Each handler decides to process the request or pass it on.
+The **Template Method** defines the skeleton of an algorithm in a base class, letting subclasses override specific steps (e.g., A Game Character's "Action" cycle: Start -> *Specific* -> End).
+
+The Testing section focuses on **GoogleTest (C++)**. It covers **Unit Testing** (isolating components), **Fixtures** (setup/teardown with `SetUp()`/`TearDown()`), **Assertions** (`ASSERT` vs `EXPECT`), and **Mocking** (simulating dependencies like databases to test in isolation).
+
+## Key Definitions, Formulas, or Arguments
+* **Chain of Responsibility:**
+    * Decouples sender/receiver.
+    * Dynamic composition of handlers (`setNextHandler()`).
+    * Risk: Request might fall off the end of the chain unhandled.
+* **Template Method:**
+    * Base class has the "Template method" (fixed steps) and "Primitive operations" (abstract/virtual steps).
+    * Inversion of Control: The base class calls the subclass methods.
+* **Testing:**
+    * **Validation vs Verification:** Building the *right* product vs. Building the product *right*.
+    * **ASSERT_*:** Fatal failure (aborts test).
+    * **EXPECT_*:** Non-fatal failure (continues test).
+    * **Fixtures:** Use `TEST_F`; ensures fresh environment per test.
+    * **Mocking:** Uses `gmock`; `MOCK_METHOD`, `EXPECT_CALL`, `.WillOnce(Return(x))`.
+
+## Diagram Insights
+* **None.** (Concepts are illustrated via code examples).
+
+## Cheat Sheet Section
+* **Chain of Responsibility:** "Pass it down the line."
+* **Template Method:** "The Hollywood Principle" (Don't call us, we'll call you/base class controls flow).
+* **GoogleTest:**
+    * `TEST(Suite, Case)` for simple tests.
+    * `TEST_F(FixtureClass, Case)` for tests needing Setup/Teardown.
+    * `ASSERT_EQ` (Stop), `EXPECT_EQ` (Continue).
+* **Mocking:** Used when real dependencies are slow, unreliable, or complex.
+
+## Final Exam Key Insights
+* **Test Isolation:** Understand why we use Mocks. If a test fails because the database is down, that's a bad unit test. Mocks prevent this.
+* **Fixture Lifecycle:** `SetUp()` runs before *every* test case in the suite, not just once.
+* **Template vs Strategy:** Template is inheritance-based (compile-time structure); Strategy is composition-based (runtime swapping).
+
+## Potential Multiple Choice Questions
+1.  **Which assertion macro in GoogleTest should be used if you want the test to continue executing even if the check fails?**
+    * A) `ASSERT_EQ`
+    * B) `EXPECT_EQ`
+    * C) `REQUIRE_EQ`
+    * D) `CHECK_EQ`
+    * **Answer: B**
+
+2.  **In the Chain of Responsibility pattern, what happens if the current handler cannot process the request?**
+    * A) It throws an exception.
+    * B) It deletes the request.
+    * C) It passes the request to the next handler in the chain.
+    * D) It returns the request to the sender.
+    * **Answer: C**
+
+3.  **What is the purpose of `SetUp()` in a GoogleTest Fixture?**
+    * A) To compile the code.
+    * B) To run once before all tests in the file.
+    * C) To initialize common resources before each individual test.
+    * D) To clean up memory after tests.
+    * **Answer: C**
+
+## Questions/Next Steps
+* Review specific `gmock` syntax (`EXPECT_CALL(...).Times(1).WillOnce(...)`) as this syntax is distinct and testable.

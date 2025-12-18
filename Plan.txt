@@ -1,0 +1,18 @@
+1) 
+
+Get all Lectures as PDFs. I know that PDF processing eats a lot of context, so to save tokens, I will feed each lecture to Notebooklm and get a summary of the key points and concepts. 
+
+2) 
+
+I will save that as context for codex. 
+
+3) 
+
+I will upload my previous project deliverable as a subfolder and ask codex to work on a new project in another subfolder that will work in the same way but without all the useless bullshit that has clogged up the original BhashaQuest project. 
+
+4) 
+
+I will manually build and verify that it implements all my desired changes and is ready to submit. The point isn't even to use any of the old code, it's pretty horseshit. The new models should be better at this and I'm expecting a high quality result. 
+
+
+This window is for 3307.

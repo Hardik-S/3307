@@ -1,0 +1,766 @@
+This is for a .tex file but you can extract the relevant information for yourself pretty easily.
+
+
+{
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  columns=fullflexible,
+  breaklines=true,
+  frame=single
+}
+
+\begin{document}
+\onehalfspacing
+
+\section{Exam Structure and Core Skills in CS3307}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item The sample final exam is divided into multiple choice, pointer reasoning, a large design patterns and SOLID refactoring section, and a unit testing section.
+  \item Most marks are concentrated in the design patterns and SOLID refactoring section, with smaller portions for MCQs, pointer questions, and unit testing.
+  \item The exam primarily evaluates the ability to refactor non-ideal C++ designs into better architectures using named patterns and SOLID principles.
+  \item Students are expected to read unfamiliar code, translate refactors into C++-style pseudo-code and UML, and justify design decisions in clear prose.
+  \item Unit testing and mocking questions connect design decisions to testability, emphasizing the importance of good interfaces and dependency structure.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item Section types: MCQs (definitions and quick concepts), pointer dereferencing, pattern-based refactoring with SOLID analysis, and unit testing with mocking.
+  \item Core design skills: identifying appropriate patterns, mapping code to UML, and reasoning about maintainability, flexibility, and testability.
+  \item Integration of SOLID principles (SRP, OCP, LSP, ISP, DIP) throughout the refactoring questions.
+  \item C++-focused reasoning: reading code with pointers, virtual functions, and object relationships to support pattern-based answers.
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Spending too much time on MCQs and pointer questions while under-investing in the high-value refactoring questions.
+  \item Writing vague pattern explanations without tying them to the provided code or SOLID principles.
+  \item Drawing UML diagrams that do not match the pseudo-code or the described refactor.
+  \item Ignoring testability in Section IV and giving answers that do not use dependency injection or mocks.
+  \item Failing to manage time across subsections, leaving entire pattern questions unanswered.
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item Outline the sections of the sample exam and approximate how many minutes you would allocate to each one.
+  \item Describe the main skill tested in each section (MCQs, pointers, refactoring, testing).
+  \item For Section III, list the steps you would follow when approaching a pattern refactoring question from scratch.
+  \item Explain how SOLID and unit testing appear across multiple exam sections, not only in one place.
+  \item Design a one-page personal “exam plan” summarizing your order of attack and time limits per question.
+\end{itemize}
+
+\section{C++ Pointers, Polymorphism, and OOP Essentials}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item Basic C++ and OOP questions appear early in the exam and test understanding of polymorphism, the \texttt{this} pointer, and pointer types and dereferencing.
+  \item Multi-level pointer questions require careful reasoning about how each pointer points to variables or other pointers and what each level of dereference prints.
+  \item These fundamentals support later design questions where dynamic dispatch, pointer ownership, and object relationships must be understood at a glance.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item Understanding expressions like:
+\begin{lstlisting}
+int x = 5;
+int* p = &x;
+int** q = &p;
+int*** r = &q;
+\end{lstlisting}
+  \item Being able to compute values of \texttt{x}, \texttt{*p}, \texttt{*q}, \texttt{**q}, \texttt{**r}, and \texttt{***r}.
+  \item Clarifying what polymorphism is: using a base-class pointer or reference to refer to derived objects and dispatch behavior at runtime.
+  \item Interpreting the meaning of the \texttt{this} pointer inside member functions and how it relates to the current object.
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Confusing the value stored at an address with the address itself, especially when dereferencing multiple times.
+  \item Misidentifying polymorphism as “code reuse” rather than behavior variation via virtual methods.
+  \item Forgetting that \texttt{*q} is itself a pointer when \texttt{q} is of type \texttt{int**}.
+  \item Assuming \texttt{this} refers to the class rather than the current object instance.
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item Given a small multi-level pointer snippet, compute the values printed at each line and justify your reasoning.
+  \item Explain in one paragraph what polymorphism means in this course and how it appears in pattern-based designs.
+  \item Write a short example where a base-class pointer points to a derived object and a virtual function is called.
+  \item Describe what would happen if you dereferenced a null pointer in C++ and why that matters when writing exam code.
+  \item Sketch a small snippet that uses \texttt{this} inside a class and explain what object \texttt{this} refers to at runtime.
+\end{itemize}
+
+\section{SOLID Principles and Code Smells in 3307}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item SOLID principles (SRP, OCP, LSP, ISP, DIP) appear both in conceptual questions and deep design refactoring tasks.
+  \item Exam questions require identifying which principle is violated in given code and explaining why that violation is harmful.
+  \item Concrete examples, such as a \texttt{Bird} and \texttt{Penguin} hierarchy, illustrate subtle violations like breaking the Liskov Substitution Principle.
+  \item SOLID is tightly tied to code smells: large conditionals, tight coupling, and mixed responsibilities often indicate violated principles.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item SRP: classes should have a single responsibility, not combine unrelated concerns.
+  \item OCP: designs should be open for extension and closed for modification, often achieved via polymorphism.
+  \item LSP: subclasses must be substitutable for their base classes without breaking client expectations.
+  \item ISP: clients should not be forced to depend on methods they do not use.
+  \item DIP: high-level modules should depend on abstractions, not concrete implementations.
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Naming the wrong SOLID principle for a given code smell (for example, calling a clear SRP issue an OCP problem).
+  \item Giving very generic explanations like “this is not extensible” without linking back to the principle definition.
+  \item Overlooking multiple principles being violated in the same snippet and only describing one.
+  \item Failing to connect SOLID violations to practical consequences like poor testability or rigid designs.
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item For each SOLID principle, write a one-sentence definition and a one-sentence consequence of violating it.
+  \item Given a short class that both reads from disk and formats output, identify the SOLID principle violated and explain why.
+  \item Sketch how you would refactor a long conditional choosing between implementations into something that respects OCP.
+  \item Using a \texttt{Bird}/\texttt{Penguin}-style example, describe how LSP can be broken even when the code compiles.
+  \item Explain how SOLID principles help make unit tests easier to write and maintain.
+\end{itemize}
+
+\section{Dependency Inversion and Dependency Injection}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item Dependency Inversion and Dependency Injection decouple high-level logic from concrete implementations.
+  \item Multiple injection styles (constructor, setter, method, interface, lazy, hybrid) are introduced, each with trade-offs.
+  \item Exam questions show hard-coded calls to \texttt{new} inside client classes and expect refactors that push object creation outward.
+  \item The testing section explicitly links good dependency design with the ability to mock collaborators easily.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item Typical refactor: replace 
+\begin{lstlisting}
+ScreenManager::ScreenManager() {
+    dialog = new WindowsDialog();
+}
+\end{lstlisting}
+with something like
+\begin{lstlisting}
+ScreenManager::ScreenManager(std::shared_ptr<DialogFactory> factory)
+  : factory(factory) {}
+
+void ScreenManager::show() {
+    auto dialog = factory->createDialog();
+    dialog->render();
+}
+\end{lstlisting}
+  \item Constructor injection as the main pattern in many examples; setter and method injection when late binding is needed.
+  \item Interfaces and abstract base classes used as types for member variables instead of concrete classes.
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Keeping \texttt{new} inside high-level classes, defeating the purpose of Dependency Inversion.
+  \item Introducing an interface but still using concrete types in key signatures.
+  \item Forgetting to update client code to supply dependencies after introducing injection.
+  \item Overcomplicating dependency graphs without clear benefit for flexibility or testability.
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item Explain in your own words what Dependency Inversion means and how Dependency Injection helps achieve it.
+  \item Take a small class that constructs a collaborator with \texttt{new} in its constructor and refactor it to use constructor injection.
+  \item Identify which injection style (constructor, setter, method) would make sense for a logging service and justify your choice.
+  \item Describe how Dependency Injection interacts with unit testing and mocking in this course.
+  \item Sketch a UML diagram showing a client class, an interface, and two concrete implementations wired through injection.
+\end{itemize}
+
+\section{Communicating Designs with UML and Pseudo-code}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item The exam expects designs to be communicated both as C++-style pseudo-code and as UML class diagrams.
+  \item For each pattern-based refactor, the UML must match the actual refactored solution, including classes, interfaces, and relationships.
+  \item Clear mapping between pattern roles (for example, Abstract Factory, Concrete Factory, Product) and their representation in UML is crucial.
+  \item Good answers integrate code, UML, and SOLID reasoning into a coherent explanation.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item Using UML class boxes for concrete and abstract classes, with inheritance arrows and composition or association lines.
+  \item Representing pattern-specific roles such as:
+        \begin{itemize}
+          \item Abstract product interfaces.
+          \item Concrete product classes.
+          \item Abstract creator/factory and concrete factories.
+        \end{itemize}
+  \item Pseudo-code written in a C++-like style that shows class declarations, key methods, and essential relationships.
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Drawing UML that still reflects the original flawed code instead of the refactored pattern-based design.
+  \item Inconsistent naming between pseudo-code, UML, and written explanations.
+  \item Omitting crucial relationships such as which class owns or creates which objects.
+  \item Adding unnecessary details to UML, making the diagram cluttered and hard to read under time pressure.
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item For a given refactored Abstract Factory solution, list the classes and indicate how you would represent them in a UML class diagram.
+  \item Write C++-style pseudo-code for a small pattern-based design and then sketch the corresponding UML structure.
+  \item Describe how you check that your UML and pseudo-code match before finalizing an exam answer.
+  \item Given a textual pattern description, outline the UML elements you would include and how they connect.
+  \item Explain why accurate UML is important for communicating design intent on the final.
+\end{itemize}
+
+\section{Creational Patterns I: Factory Method and Abstract Factory}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item Creational patterns control object construction to reduce coupling and provide flexibility.
+  \item Factory Method and Abstract Factory are highlighted in lectures and directly examined in refactoring questions.
+  \item Exam tasks show clients that create concrete objects directly and expect a refactor that delegates creation to factories.
+  \item Proper use of these patterns aligns with Dependency Inversion and Open/Closed principles.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item Abstract Factory structure:
+\begin{lstlisting}
+class Dialog {
+public:
+    virtual void render() = 0;
+    virtual ~Dialog() = default;
+};
+
+class DialogFactory {
+public:
+    virtual std::unique_ptr<Dialog> createDialog() = 0;
+    virtual ~DialogFactory() = default;
+};
+
+class WindowsDialogFactory : public DialogFactory {
+public:
+    std::unique_ptr<Dialog> createDialog() override {
+        return std::make_unique<WindowsDialog>();
+    }
+};
+\end{lstlisting}
+  \item Clients depend on \texttt{DialogFactory} and \texttt{Dialog}, not platform-specific subclasses.
+  \item Factory Method as a pattern where subclasses override a creation method to decide which concrete product to instantiate.
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Leaving platform or type conditionals in the client after introducing factories.
+  \item Mixing abstract and concrete types in member variables, defeating the purpose of abstraction.
+  \item Mislabeling pattern roles in UML or pseudo-code (for example, calling a factory a product).
+  \item Overcomplicating factories for trivial cases where a simple constructor would suffice (in exam context, follow the question).
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item Explain in a few sentences the difference between Factory Method and Abstract Factory as used in this course.
+  \item Refactor a simple platform-dependent constructor into an Abstract Factory, writing the key class declarations.
+  \item Draw a UML diagram for your Abstract Factory refactor and label the key roles.
+  \item Describe how the Abstract Factory refactor improves extensibility when a new platform is introduced.
+  \item Identify where Dependency Injection naturally appears in your factory-based solutions.
+\end{itemize}
+
+\section{Creational Patterns II: Builder and Prototype}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item Builder handles construction of complex objects with many parameters, avoiding telescoping constructors.
+  \item Prototype encapsulates object cloning, allowing clients to copy pre-configured instances instead of repeating setup.
+  \item Exam questions present rigid constructor-based or duplicated initialization logic and require refactors to Builder or Prototype.
+  \item Both patterns make it easier to extend the system with new variants while keeping client code simple.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item Builder skeleton:
+\begin{lstlisting}
+class PizzaBuilder {
+public:
+    virtual void addDough() = 0;
+    virtual void addSauce() = 0;
+    virtual void addToppings() = 0;
+    virtual Pizza getResult() = 0;
+};
+
+class Director {
+public:
+    void constructMargherita(PizzaBuilder& builder) {
+        builder.addDough();
+        builder.addSauce();
+        builder.addToppings();
+    }
+};
+\end{lstlisting}
+  \item Prototype skeleton:
+\begin{lstlisting}
+class Vehicle {
+public:
+    virtual std::unique_ptr<Vehicle> clone() const = 0;
+    virtual ~Vehicle() = default;
+};
+
+class Car : public Vehicle {
+public:
+    std::unique_ptr<Vehicle> clone() const override {
+        return std::make_unique<Car>(*this);
+    }
+};
+\end{lstlisting}
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Implementing Builder but still using complex constructors directly in clients.
+  \item Forgetting to provide a \texttt{getResult} or equivalent method that returns the built object.
+  \item Implementing Prototype without correctly copying internal state, or forgetting to return polymorphic clones.
+  \item Confusing when to use Builder (complex configuration) versus Prototype (cloning existing configurations).
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item Describe a situation in which Builder is more appropriate than Abstract Factory for this course.
+  \item Refactor a fixed \texttt{Pizza} constructor with many parameters into a Builder with a Director.
+  \item Explain how Prototype reduces duplicated initialization logic in code that creates many similar objects.
+  \item Sketch a UML diagram showing a \texttt{Vehicle} prototype hierarchy and a client that uses it.
+  \item Compare how adding a new pizza type would work before and after introducing Builder.
+\end{itemize}
+
+\section{Structural Patterns: Decorator and Facade}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item Structural patterns reorganize class relationships to improve modularity and simplify client interactions.
+  \item Decorator wraps an object to add responsibilities dynamically without creating a combinatorial explosion of subclasses.
+  \item Facade introduces a simplified interface that hides the complexity of multiple subsystems from the client.
+  \item Exam problems use pizza toppings and smart home subsystems to test recognition and application of these patterns.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item Decorator sketch:
+\begin{lstlisting}
+class Pizza {
+public:
+    virtual double cost() const = 0;
+    virtual std::string description() const = 0;
+    virtual ~Pizza() = default;
+};
+
+class ToppingDecorator : public Pizza {
+protected:
+    std::unique_ptr<Pizza> pizza;
+public:
+    ToppingDecorator(std::unique_ptr<Pizza> p)
+      : pizza(std::move(p)) {}
+};
+\end{lstlisting}
+  \item Facade sketch:
+\begin{lstlisting}
+class SmartHomeFacade {
+public:
+    void initializeSmartHome() {
+        lights.turnOn();
+        thermostat.setComfortMode();
+        security.arm();
+    }
+private:
+    Lights lights;
+    Thermostat thermostat;
+    SecuritySystem security;
+};
+\end{lstlisting}
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Modeling toppings as subclasses of each pizza type instead of as decorators wrapping a base pizza.
+  \item Forgetting to delegate calls in decorators to the wrapped component.
+  \item Creating a Facade but still letting client code talk directly to underlying subsystems.
+  \item Drawing UML diagrams that do not show composition from decorators to components.
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item Refactor a pizza example that has classes for every topping combination into a Decorator-based design.
+  \item Explain how Decorator helps with the Open/Closed Principle for pizza toppings.
+  \item Design a Facade for a simple media system (TV, speakers, streaming box) and write a short pseudo-code method that uses it.
+  \item Describe when you would choose Facade versus just a helper function or class in this course context.
+  \item Sketch UML diagrams for both the Decorator and Facade examples and annotate the key relationships.
+\end{itemize}
+
+\section{Behavioral Pattern: Template Method}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item Template Method defines a fixed algorithm structure in a base class and lets subclasses override specific steps.
+  \item Exam questions show repeated sequences of method calls that should be centralized in a template method.
+  \item The PaymentProcessor scenario is used to illustrate how to move control flow out of client code and into an abstract base.
+  \item This pattern reinforces Open/Closed by allowing new concrete types without changing the overall algorithm.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item Template Method skeleton:
+\begin{lstlisting}
+class PaymentProcessor {
+public:
+    void processTransaction() {
+        initialize();
+        processPayment();
+        finalizeTransaction();
+    }
+protected:
+    virtual void initialize() = 0;
+    virtual void processPayment() = 0;
+    virtual void finalizeTransaction() = 0;
+    virtual ~PaymentProcessor() = default;
+};
+\end{lstlisting}
+  \item Client code calls only \texttt{processTransaction} on a \texttt{PaymentProcessor*} or reference.
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Leaving the algorithm steps scattered in client code after adding a template method.
+  \item Forgetting to declare step methods as virtual and override them in subclasses.
+  \item Adding extra steps in subclasses that break the intended algorithm order.
+  \item Misunderstanding which parts of the algorithm belong in the base class versus subclasses.
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item Identify an algorithm in which a fixed sequence of operations is repeated for different concrete types and outline a Template Method solution.
+  \item Write pseudo-code for a \texttt{DataExporter} base class that reads, transforms, and writes data, with customizable steps.
+  \item For the PaymentProcessor example, describe how main changes before and after introducing Template Method.
+  \item Explain how Template Method supports the Open/Closed Principle in this course.
+  \item Sketch a UML diagram showing the base class template method and two concrete subclasses.
+\end{itemize}
+
+\section{Behavioral Patterns: Observer and Strategy}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item Observer decouples subjects from observers by using a registration and notification mechanism.
+  \item Strategy encapsulates interchangeable algorithms behind a common interface, often replacing long conditionals.
+  \item Exam questions use a stock price notifier and variable pricing logic to test recognition and correct application of these patterns.
+  \item Both patterns address flexibility and extensibility: adding new observers or strategies should not require changing the subject or context class.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item Observer sketch:
+\begin{lstlisting}
+class Observer {
+public:
+    virtual void update(double price) = 0;
+    virtual ~Observer() = default;
+};
+
+class Stock {
+public:
+    void registerObserver(Observer* o) { observers.push_back(o); }
+    void setPrice(double p) {
+        price = p;
+        notifyObservers();
+    }
+private:
+    void notifyObservers() {
+        for (auto o : observers) o->update(price);
+    }
+    std::vector<Observer*> observers;
+    double price;
+};
+\end{lstlisting}
+  \item Strategy sketch:
+\begin{lstlisting}
+class PricingStrategy {
+public:
+    virtual double calculate(double basePrice) const = 0;
+    virtual ~PricingStrategy() = default;
+};
+
+class PriceCalculator {
+public:
+    PriceCalculator(std::unique_ptr<PricingStrategy> s)
+      : strategy(std::move(s)) {}
+    double getPrice(double base) const {
+        return strategy->calculate(base);
+    }
+private:
+    std::unique_ptr<PricingStrategy> strategy;
+};
+\end{lstlisting}
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Keeping explicit calls to all observers in the subject instead of using a generic observer list.
+  \item Implementing Strategy but leaving conditional logic inside the context instead of delegating fully.
+  \item Confusing Strategy with State (both use polymorphism, but for different purposes).
+  \item Forgetting to consider what happens when no observers or a null strategy is present.
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item For a stock price example, write the interfaces and methods needed to implement an Observer-based design.
+  \item Describe a pricing scenario where Strategy is clearly preferable to a series of \texttt{if} statements.
+  \item Compare and contrast how adding a new display type differs in a naive design versus an Observer-based design.
+  \item Sketch UML diagrams for both Observer and Strategy solutions and label the key roles.
+  \item Explain how these patterns relate to SOLID, particularly SRP and OCP.
+\end{itemize}
+
+\section{Behavioral Patterns: Command and State}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item Command encapsulates a request as an object, separating the invoker of an action from its receiver.
+  \item State represents different modes of an object as separate classes, letting behavior change with the internal state.
+  \item Lectures use examples such as vending machines for State and simple operations for Command.
+  \item These patterns are part of the behavioral toolkit that can be applied when operations or modes are becoming tangled.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item Command sketch:
+\begin{lstlisting}
+class Command {
+public:
+    virtual void execute() = 0;
+    virtual ~Command() = default;
+};
+
+class Invoker {
+public:
+    void setCommand(std::unique_ptr<Command> c) {
+        cmd = std::move(c);
+    }
+    void run() {
+        if (cmd) cmd->execute();
+    }
+private:
+    std::unique_ptr<Command> cmd;
+};
+\end{lstlisting}
+  \item State sketch:
+\begin{lstlisting}
+class VendingState {
+public:
+    virtual void insertCoin() = 0;
+    virtual void selectItem() = 0;
+    virtual ~VendingState() = default;
+};
+
+class VendingMachine {
+public:
+    void setState(std::unique_ptr<VendingState> s) {
+        state = std::move(s);
+    }
+    void insertCoin() { state->insertCoin(); }
+    void selectItem() { state->selectItem(); }
+private:
+    std::unique_ptr<VendingState> state;
+};
+\end{lstlisting}
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Using long \texttt{switch} statements or conditionals instead of considering State when behavior depends heavily on mode.
+  \item Implementing Command but still hard-coding operations in the invoker.
+  \item Failing to clearly separate responsibilities between context and state objects.
+  \item Confusing how State differs from Strategy in intent (modes vs interchangeable algorithms).
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item Describe a UI action scenario where Command would be useful and outline the base command interface.
+  \item Refactor a \texttt{switch} statement on a \texttt{Mode} enum into a State-based design at a high level.
+  \item Explain how State can help manage complex sequences of operations in a vending machine.
+  \item Compare Command and State: how are they similar structurally and different conceptually?
+  \item Sketch UML diagrams for a simple State-based vending machine and identify transitions.
+\end{itemize}
+
+\section{Unit Testing Fundamentals with GoogleTest}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item Unit tests check small pieces of code in isolation, complementing integration and system tests.
+  \item The course uses GoogleTest-style structures to illustrate test cases, fixtures, and assertions.
+  \item Exam questions ask which methods to test and how to design tests that align with object responsibilities.
+  \item Good design patterns and SOLID principles make tests easier to write, maintain, and interpret.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item Basic GoogleTest-style skeleton:
+\begin{lstlisting}
+TEST(InventoryTest, AddItemIncreasesCount) {
+    Inventory inv;
+    inv.addItem("apple");
+    EXPECT_EQ(1, inv.count("apple"));
+}
+\end{lstlisting}
+  \item Use of fixtures for common setup when many tests share the same starting state.
+  \item Emphasis on testing behavior, not implementation details, and on isolating the class under test.
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Writing tests that depend on internal implementation details instead of the public interface.
+  \item Combining multiple logically distinct checks into one long test that is hard to debug.
+  \item Forgetting to consider how testability is affected by dependencies and tight coupling.
+  \item Misidentifying which class or method should be the focus of a unit test.
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item For a simple \texttt{Inventory} class, list three behaviors you would test and sketch the corresponding assertions.
+  \item Explain the difference between unit, integration, and system tests in the context of this course.
+  \item Given a small class with a dependency, describe how you would design tests to focus on the class under test.
+  \item Rewrite a long, multi-check test into smaller, clearer tests and explain why this is preferable.
+  \item Discuss how following SOLID principles in your design affects the structure of your test suite.
+\end{itemize}
+
+\section{Mocking, Test Doubles, and Designing for Testability}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item Mocking and test doubles allow you to isolate the class under test by replacing real collaborators with controlled fakes.
+  \item Dependency Injection and interfaces enable mocks to be swapped in easily during tests.
+  \item Exam questions connect mocking with design decisions, such as how an \texttt{OrderService} depends on an \texttt{Inventory} interface.
+  \item Testability is treated as a first-class design goal alongside flexibility and maintainability.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item Interface and mock sketch:
+\begin{lstlisting}
+class Inventory {
+public:
+    virtual bool hasStock(const std::string& item) const = 0;
+    virtual void remove(const std::string& item) = 0;
+    virtual ~Inventory() = default;
+};
+
+class MockInventory : public Inventory {
+public:
+    bool hasStock(const std::string& item) const override {
+        return true; // simple fake behavior for tests
+    }
+    void remove(const std::string& item) override { /* record call */ }
+};
+\end{lstlisting}
+  \item \texttt{OrderService} receives an \texttt{Inventory\&} or pointer via injection and uses it through the interface.
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Designing classes that construct their own dependencies, making them hard to mock.
+  \item Confusing mocks, stubs, and fakes, and not clearly stating what behavior is being tested.
+  \item Letting tests rely on external systems (for example, real databases or files) when course expectations assume isolation.
+  \item Overcomplicating mock behavior instead of focusing on minimal behavior needed for the test.
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item Explain how designing with interfaces and DI from the start improves testability.
+  \item Sketch an \texttt{OrderService} interface and describe how you would inject a mock \texttt{Inventory} in tests.
+  \item For a given collaborator-heavy class, list which dependencies you would mock and why.
+  \item Write pseudo-code for a unit test that uses a mock to verify that \texttt{OrderService} calls \texttt{remove} only when stock is available.
+  \item Describe changes you would make to a tightly coupled design to introduce seams suitable for mocking.
+\end{itemize}
+
+\section{Integrating SOLID, Patterns, and Testing in Exam-Style Refactoring Tasks}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item The core of the exam requires integrating SOLID principles, design patterns, UML, and testing considerations into a unified refactor.
+  \item Each Section III question uses a non-ideal code snippet and a specified pattern as the basis for a complete design transformation.
+  \item Canonical refactorings in the solutions illustrate consistent ways of introducing patterns and improving testability.
+  \item The goal is to move from ad-hoc, rigid code to a structured, pattern-based design that supports extension and unit testing.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item Common refactoring pipeline:
+        \begin{enumerate}
+          \item Identify code smells (long conditionals, tight coupling, repeated logic).
+          \item Map smells to relevant SOLID principles.
+          \item Choose the named pattern and outline its roles for this context.
+          \item Write refactored C++ pseudo-code and draw matching UML.
+          \item Reflect briefly on testability of the new design.
+        \end{enumerate}
+  \item Patterns used include Abstract Factory, Builder, Prototype, Decorator, Facade, Observer, Strategy, and Template Method.
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Treating each question as purely “pattern recognition” without explicitly linking to SOLID or testing.
+  \item Writing partial refactors that leave some original smells (for example, old conditionals) in place.
+  \item UML and pseudo-code drifting apart, suggesting an inconsistent understanding of the solution.
+  \item Ignoring the named pattern in the question and applying a different pattern.
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item Pick a pattern from the course and outline how you would apply it to a small, flawed snippet: list smells, SOLID issues, and pattern roles.
+  \item For a given exam-style description, decide which pattern is appropriate and justify your choice using SOLID language.
+  \item Write a step-by-step checklist you would follow when answering any Section III refactoring question.
+  \item Sketch a brief example of how your refactor would be more testable than the original design.
+  \item Reflect on one pattern and describe how its use supports both better design and cleaner tests.
+\end{itemize}
+
+\section{Qt, Signals/Slots, and Project Architecture (Instructor-specific / unclear)}
+
+\subsection*{Main Concepts}
+\begin{itemize}
+  \item The uploaded materials focus primarily on generic C++ design, patterns, and testing, with limited explicit Qt content.
+  \item The course title and description imply Qt and signals/slots, but the exact Qt coverage on the final exam is not visible in these materials.
+  \item It is reasonable to connect Qt UI code with patterns like Observer and with layered or MVC-style architectures.
+  \item Students should mentally align their Qt project work with the design and testing ideas emphasized by the exam.
+\end{itemize}
+
+\subsection*{Key Structures, Patterns, or Code Ideas}
+\begin{itemize}
+  \item Qt signals and slots can be seen as a framework-level Observer mechanism between UI elements and controller logic.
+  \item A typical Qt-based architecture might separate UI widgets, controller/logic classes, and underlying model or service classes.
+  \item Design patterns and SOLID principles apply within Qt code just as they do in plain C++ code.
+\end{itemize}
+
+\subsection*{Common Pitfalls and Exam Traps}
+\begin{itemize}
+  \item Mixing UI code, business logic, and persistence logic inside a single Qt widget class.
+  \item Assuming that the exam will test Qt API details if they are not supported by the uploaded materials.
+  \item Forgetting to analyze Qt project code through the lens of SOLID and patterns when preparing for design questions.
+  \item Ignoring testability for non-UI components in a Qt application.
+\end{itemize}
+
+\subsection*{Practice Prompts}
+\begin{itemize}
+  \item Choose one of your Qt windows or dialogs and identify where Observer-like behavior (signals/slots) arises.
+  \item Sketch a high-level layered architecture for your project separating UI, application logic, and data/model components.
+  \item Identify one place in your Qt code where responsibilities are mixed and describe how you would refactor it using SOLID or patterns.
+  \item Explain how you might unit test non-UI classes in a Qt project and what design changes would help.
+  \item Reflect on how the design and testing themes from the exam could apply to your term project, even if not directly tested.
+\end{itemize}
+
+\end{document}
+
+}

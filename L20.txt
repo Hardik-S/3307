@@ -1,0 +1,66 @@
+# Usability & Unit Testing (GoogleTest)
+Lecture 20 — 11/26/2025
+
+## Summary
+This lecture bridges the gap between User Experience (UX) and backend Engineering Quality Assurance. It begins by defining **Usability Testing**, focusing on Heuristic Evaluation using Nielsen’s 10 Heuristics. The goal is to identify design flaws early using a small set of evaluators (typically 3–5) to find the majority of usability problems.
+
+The second half transitions to **Software Testing**, specifically Unit Testing using the **GoogleTest** framework for C++. It covers the hierarchy of testing (Unit -> Integration -> System -> Performance) and details the technical implementation of tests using Assertions (`EXPECT` vs `ASSERT`), **Fixtures** for setup/teardown, and **Mocking** (using Google Mock) to isolate dependencies during testing.
+
+## Key Definitions, Formulas, or Arguments
+* **Heuristic Evaluation**: A method where experts assess an interface against established usability principles (Nielsen's 10).
+* **The "Magic Number" 5**: Research indicates that using 5 evaluators typically reveals about 75-80% of usability problems; adding more yields diminishing returns (benefit/cost ratio drops).
+* **Severity Rating (0-4)**: A scale to prioritize bugs, ranging from 0 (not a problem) to 4 (usability catastrophe).
+* **Verification vs. Validation**:
+    * *Verification*: "Are we building the product right?" (Meets specs).
+    * *Validation*: "Are we building the right product?" (Meets user needs).
+* **Test Fixture**: A class inheriting from `::testing::Test` used to share setup (`SetUp()`) and cleanup (`TearDown()`) logic across multiple tests.
+* **Mocking**: Creating a fake version of a dependency (e.g., a database service) to test a component in isolation. Key macros include `MOCK_METHOD` and `EXPECT_CALL`.
+
+## Diagram Insights
+* **Evaluator Matrix (Page 12)**: A matrix showing "Evaluators" on the Y-axis and "Usability Problems" on the X-axis. It illustrates that different evaluators find different problems; no single person finds them all, but collectively they cover most issues.
+* **Diminishing Returns Graph (Page 22)**: A curve plotting "Proportion of Usability Problems Found" against "Number of Evaluators." The curve rises steeply and plateaus around 5 evaluators (finding ~80%), supporting the argument that 5 is the cost-effective sweet spot.
+* **Benefit/Cost Ratio (Page 22)**: A bell curve showing the ratio of benefits to costs peaks at roughly 4-5 evaluators, confirming this is the most efficient allocation of resources.
+
+## Cheat Sheet (GoogleTest Syntax)
+* **Basic Test**: `TEST(TestSuite, TestCase) { ... }`
+* **Fixture**: `TEST_F(FixtureClassName, TestCase) { ... }`
+* **Assertions**:
+    * `EXPECT_EQ(val1, val2)`: Fails test but continues execution.
+    * `ASSERT_EQ(val1, val2)`: Fails test and **stops** execution immediately.
+* **Mocking**:
+    * Define: `MOCK_METHOD(ReturnType, MethodName, (Args), (override));`
+    * Expect: `EXPECT_CALL(mockObj, Method(Args)).WillOnce(Return(Val));`
+
+## Final Exam Key Insights
+* **Direct Mapping**: This lecture is the direct source for **Section IV** of the Sample Exam.
+* **Mocking Task**: You will likely be asked to write a Google Mock test case. You must know how to:
+    1.  Create a mock class inheriting from the interface.
+    2.  Use `EXPECT_CALL` to define behavior (e.g., `.WillOnce(Return(false))`).
+    3.  Inject the mock into the service being tested.
+* **Differentiation**: Be prepared to explain *why* we mock (to isolate the unit from external dependencies like databases or hardware).
+
+## Potential Multiple Choice Questions
+1.  **According to research presented on Heuristic Evaluation, what is the optimal number of evaluators to maximize the benefit-to-cost ratio?**
+    * a) 1
+    * b) 3-5
+    * c) 10
+    * d) 15
+    * **Answer:** b (Based on the graphs on Page 22).
+
+2.  **In GoogleTest, which assertion macro should be used if the failure of a condition implies that the rest of the test cannot meaningfully proceed?**
+    * a) `EXPECT_EQ`
+    * b) `CHECK_TRUE`
+    * c) `ASSERT_EQ`
+    * d) `VERIFY_EQ`
+    * **Answer:** c (ASSERT stops execution; EXPECT continues).
+
+3.  **Which SOLID principle is most challenged by the Singleton design pattern, often complicating Unit Testing as mentioned in the lecture challenges?**
+    * a) Open/Closed Principle
+    * b) Single Responsibility Principle
+    * c) Liskov Substitution Principle
+    * d) Interface Segregation Principle
+    * **Answer:** b (Single Responsibility - though the lecture notes specifically mention "Tight coupling" making testing hard, standard testing theory links this to global state issues violating SRP and Dependency Inversion).
+
+## Questions/Next Steps
+* **Review**: The `EXPECT_CALL` syntax in the lecture slides (Page 56-57) is critical for Section IV of the exam. Practice writing out a mock expectation by hand.
+* **Clarification**: Ensure understanding of the difference between `WillOnce` and `WillRepeatedly` in mocking.

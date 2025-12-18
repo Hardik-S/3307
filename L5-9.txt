@@ -1,0 +1,283 @@
+# Lecture 5: C++ Templates and Advanced Patterns
+**Lecture 5 — 9/18/2025**
+
+## Summary
+This lecture introduces advanced C++ mechanisms for writing generic and reusable code. It begins with the fundamentals of function and class templates, allowing developers to write code that works with any data type, thereby avoiding duplication. The lecture covers template instantiation and parameters, emphasizing how compilers generate specific classes or functions at compile time based on usage.
+
+The discussion advances to Template Specialization (full and partial), which allows custom behavior for specific types (e.g., pointers or booleans). The lecture concludes with two powerful architectural patterns: Mixins, which use templated inheritance to add modular behavior ("plug-in" style), and the Curiously Recurring Template Pattern (CRTP), which achieves static polymorphism by having a base class templated on its derived class.
+
+## Key Definitions, Formulas, or Arguments
+* **Function Templates**: Blueprints for functions that work with generic types (e.g., `template <typename T> T max(T a, T b)`).
+* **Class Templates**: Blueprints for classes where member variables or methods use generic types.
+* **Template Specialization**:
+    * *Full*: Providing a distinct implementation for a specific type (e.g., `template <> class Storage<bool>`).
+    * *Partial*: Customizing behavior for a subset of types (e.g., `template <typename T> class Wrapper<T*>`).
+* [cite_start]**Policy-Based Design**: Injecting custom behavior (policies) via template parameters rather than inheritance, enabling compile-time composition[cite: 2834].
+* **Curiously Recurring Template Pattern (CRTP)**: A pattern where a class `Derived` inherits from `Base<Derived>`. [cite_start]It enables static polymorphism, which is faster than virtual functions because it avoids vtable lookups[cite: 2932].
+* [cite_start]**Mixins**: Classes that add reusable behavior to other classes via inheritance without being the parent in a traditional hierarchy (e.g., `class MyComponent : public LoggerMixin<MyComponent>`)[cite: 3038].
+
+## Diagram Insights
+* **None**: The slides rely heavily on code examples (e.g., `max` function, `Box` class, `LoggerMixin` implementation) rather than visual diagrams to illustrate concepts.
+
+## Questions/Next Steps
+* Review the syntax difference between Full and Partial specialization, as syntax errors here are common.
+* Clarify the specific use cases where CRTP performance gains (no vtable) outweigh the flexibility of runtime polymorphism.
+
+## Cheat Sheet
+* **Template Syntax**: `template <typename T>` before function/class.
+* **CRTP Pattern**: `class Derived : public Base<Derived> { ... }`.
+* **Mixin Pattern**: `class Concrete : public MixinA<Concrete>, public MixinB<Concrete> { ... }`.
+* **CRTP vs Virtual**: CRTP = Compile-time (fast, rigid); Virtual = Runtime (slower, flexible).
+
+## Final Exam Key Insights
+* Expect questions on *why* one would use CRTP (performance/static polymorphism).
+* Be prepared to write or debug a simple Template Specialization (e.g., handling `bool` or pointers differently).
+* Understand that Policy-Based Design uses composition via templates, avoiding the overhead of virtual inheritance.
+
+## Potential Multiple Choice Questions
+1.  **What is the primary performance benefit of using CRTP over virtual functions?**
+    * A) Reduced memory usage
+    * B) Elimination of vtable lookups
+    * C) Faster compilation time
+    * D) Easier debugging
+    * *Answer: B*
+2.  **Which C++ feature allows a class to inherit features from a template parameter, effectively "stacking" behaviors?**
+    * A) Virtual Inheritance
+    * B) Partial Specialization
+    * C) Mixins
+    * D) Abstract Factory
+    * *Answer: C*
+3.  **In Template Specialization, what is the difference between full and partial specialization?**
+    * A) Full specialization defines all types; partial defines only one.
+    * B) Full specialization customizes for a specific type; partial customizes for a pattern of types (like pointers).
+    * C) Partial specialization is not supported in C++.
+    * D) Full specialization happens at runtime; partial at compile time.
+    * *Answer: B*
+
+---
+
+# Lecture 6: SOLID Principles
+**Lecture 6 — 9/23/2025**
+
+## Summary
+This lecture covers the SOLID principles, a set of five design guidelines intended to make software designs more understandable, flexible, and maintainable. The lecture walks through each principle with "Bad" (violation) and "Good" (refactored) code examples.
+
+It emphasizes that violating these principles leads to fragile code that is tightly coupled and hard to test. For example, the lecture demonstrates how the Single Responsibility Principle (SRP) splits a monolithic class into distinct classes for business logic, persistence, and communication. It also covers the Open/Closed Principle (OCP) using a payment processor example, showing how to add payment methods without modifying existing code.
+
+## Key Definitions, Formulas, or Arguments
+* [cite_start]**SRP (Single Responsibility Principle)**: A class should have only one reason to change; it should encapsulate one axis of change[cite: 16].
+* **OCP (Open/Closed Principle)**: Software entities should be open for extension but closed for modification. [cite_start]Achieved via abstraction/polymorphism[cite: 229].
+* **LSP (Liskov Substitution Principle)**: Subtypes must be substitutable for their base types without altering program correctness. [cite_start]Violations often involve derived classes throwing exceptions for base behaviors (e.g., Penguins cannot fly)[cite: 697].
+* **ISP (Interface Segregation Principle)**: Clients should not be forced to depend on interfaces they do not use. [cite_start]Prefer small, specific interfaces over "fat" ones[cite: 933].
+* **DIP (Dependency Inversion Principle)**: High-level modules should not depend on low-level modules; both should depend on abstractions. [cite_start]Details should depend on abstractions[cite: 1336].
+
+## Diagram Insights
+* **None**: The lecture uses code listings to illustrate structural changes (e.g., splitting `Report` class into `Report`, `ReportSaver`, and `ReportSender`) rather than UML diagrams.
+
+## Questions/Next Steps
+* Review the specific "Bird" example for LSP to ensure understanding of why `Penguin` inheriting from `Bird` (if `Bird` has `fly()`) is a violation.
+* Clarify the difference between Dependency Inversion (the principle) and Dependency Injection (the pattern used to achieve it).
+
+## Cheat Sheet
+* **SRP**: One class = One job.
+* **OCP**: Add new code, don't change old code.
+* **LSP**: Child must act like Parent (no surprises).
+* **ISP**: Split large interfaces into smaller ones.
+* **DIP**: Depend on Interfaces, not Classes.
+
+## Final Exam Key Insights
+* You will likely be asked to identify which SOLID principle is violated in a provided code snippet.
+* The Payment Processor example is a classic OCP case; remember that using `switch/case` on types is a "smell" for OCP violation.
+* LSP violations usually involve a subtype throwing an error for a method it inherited but cannot support.
+
+## Potential Multiple Choice Questions
+1.  **Which principle suggests that a class `Report` should not handle both data generation and saving to a file?**
+    * A) OCP
+    * B) DIP
+    * C) SRP
+    * D) LSP
+    * *Answer: C*
+2.  **If a `Penguin` class inherits from a `Bird` class but throws an exception when `fly()` is called, which principle is violated?**
+    * A) ISP
+    * B) LSP
+    * C) DIP
+    * D) OCP
+    * *Answer: B*
+3.  **According to the Dependency Inversion Principle, high-level modules should depend on:**
+    * A) Low-level modules
+    * B) Concrete implementations
+    * C) Abstractions
+    * D) The main function
+    * *Answer: C*
+
+---
+
+# Lecture 7: Dependency Injection
+**Lecture 7 — 9/25/2025**
+
+## Summary
+This lecture defines Dependency Injection (DI) as a technique where objects are supplied with their dependencies from the outside rather than creating them internally. This decoupling allows for easier testing, swapping of implementations (e.g., Stripe vs. PayPal), and cleaner architecture.
+
+The lecture details several types of injection: Constructor (for required dependencies), Setter (for optional ones), Interface, and Method injection. It also introduces "Lazy Injection" using factories/providers for expensive resources and "Hybrid Injection" which combines constructor and setter methods for a balance of safety and flexibility.
+
+## Key Definitions, Formulas, or Arguments
+* [cite_start]**Dependency Injection**: The act of providing objects that an object needs (its dependencies) from the outside[cite: 4126].
+* **Constructor Injection**: Dependencies passed via constructor. Best for required dependencies. [cite_start]Ensures object is fully initialized[cite: 4133].
+* **Setter Injection**: Dependencies set via methods after creation. Best for optional dependencies. [cite_start]Risk of null pointers if not set[cite: 4133].
+* **Interface Injection**: The dependency object implements an interface (e.g., `IConfigurable`) that provides a method (e.g., `setConfig`) for the injector to call.
+* **Method Injection**: Dependencies passed as parameters to a specific method call. [cite_start]Good for one-off uses[cite: 4133].
+* [cite_start]**Lazy Injection**: Injecting a provider or factory function rather than the object itself, allowing creation only when needed[cite: 4133].
+
+## Diagram Insights
+* **Table on Page 4**: A comparative table summarizing Constructor, Setter, Interface, Method, Lazy, and Hybrid injection. It contrasts "How It Works," "Best Use Case," "Pros," and "Cons" for each pattern. This is a critical study resource for comparing the techniques.
+
+## Questions/Next Steps
+* Practice implementing a simple "Hybrid" injection class to understand how to handle both required (constructor) and optional (setter) dependencies safely.
+* Review how `std::function` is used in the Lazy Injection example to act as a provider.
+
+## Cheat Sheet
+* **Constructor DI**: `Service(Dependency* d) : dep(d) {}` (Use for MUST HAVE).
+* **Setter DI**: `void setDep(Dependency* d) { dep = d; }` (Use for OPTIONAL).
+* **Lazy DI**: Inject a `std::function` or factory that returns the object later.
+* **Hybrid**: Mix Constructor and Setter.
+
+## Final Exam Key Insights
+* Understand the trade-off: Constructor injection guarantees safety (no nulls), while Setter injection offers flexibility (can change at runtime).
+* Be prepared to recommend an injection type based on a scenario (e.g., "Dependency is expensive and rarely used" -> Lazy Injection).
+* Interface injection is noted as "less common in C++," so focus more on Constructor and Setter injection.
+
+## Potential Multiple Choice Questions
+1.  **Which type of dependency injection is best suited for required dependencies that the object cannot function without?**
+    * A) Setter Injection
+    * B) Method Injection
+    * C) Constructor Injection
+    * D) Interface Injection
+    * *Answer: C*
+2.  **What is a primary disadvantage of Setter Injection?**
+    * A) It creates circular dependencies.
+    * B) The object might be in an incomplete state (null dependency) if the setter isn't called.
+    * C) It increases constructor bloat.
+    * D) It prevents runtime configuration.
+    * *Answer: B*
+3.  **Lazy Injection is most useful when:**
+    * A) The dependency is lightweight and always used.
+    * B) You want to enforce a strict interface contract.
+    * C) The dependency is resource-intensive and might not be used.
+    * D) You are using C++ templates.
+    * *Answer: C*
+
+---
+
+# Lecture 8: Creational Design Patterns
+**Lecture 8 — 10/1/2025**
+
+## Summary
+This lecture focuses on Creational Design Patterns, which handle object creation mechanisms to increase flexibility and reuse. It covers the Singleton pattern in depth, explaining how to ensure a class has only one instance via a private constructor and a static `getInstance()` method.
+
+The lecture then contrasts direct object creation (using `new`) with Factory patterns. The Factory Method pattern is introduced to delegate object creation to subclasses, promoting loose coupling. Finally, the Abstract Factory pattern is presented as a way to create families of related objects (e.g., `WordDocument` + `WordEditor`) without specifying their concrete classes.
+
+## Key Definitions, Formulas, or Arguments
+* **Singleton Pattern**: Ensures a class has only one instance and provides a global point of access.
+    * [cite_start]*Implementation*: Private constructor, static pointer `instance`, static method `getInstance()`[cite: 1823].
+    * *Pros*: Controlled access, lazy initialization.
+    * [cite_start]*Cons*: Global state, tight coupling, difficult testing[cite: 1647].
+* **Factory Method**: Defines an interface for creating an object but lets subclasses alter the type of objects that will be created. [cite_start]Solves the "Tight Coupling" problem of using `new` directly[cite: 1973].
+* [cite_start]**Abstract Factory**: Provides an interface for creating families of related or dependent objects without specifying their concrete classes (e.g., Document and Editor families)[cite: 2426].
+
+## Diagram Insights
+* **None**: While the lecture discusses structural relationships (which are usually diagrammed), the slides present these purely through code walkthroughs (e.g., `DocumentFactory`, `WordDocumentFactory`) and text descriptions.
+
+## Questions/Next Steps
+* Review the thread-safety risks of the Singleton implementation provided (simple `if (instance == nullptr)` is not thread-safe).
+* Distinguish clearly between Factory Method (one product) and Abstract Factory (families of products).
+
+## Cheat Sheet
+* **Singleton**: `private constructor`, `static instance`, `public static getInstance()`.
+* **Factory Method**: `createDocument()` returns `Document*` (polymorphism).
+* **Abstract Factory**: `createDocument()` AND `createEditor()` (related family).
+* **Tight Coupling**: Using `new ConcreteClass()` directly in business logic.
+
+## Final Exam Key Insights
+* Singleton is controversial; know *why* it is considered an anti-pattern (testing difficulty, global state).
+* Be able to identify when to upgrade from Factory Method to Abstract Factory (hint: when you have multiple *types* of objects that need to match, like WindowsButton + WindowsMenu).
+* Polymorphism is the mechanism that makes Factories work (returning `Document*` instead of `WordDocument*`).
+
+## Potential Multiple Choice Questions
+1.  **Which design pattern ensures a class has only one instance and provides a global access point to it?**
+    * A) Factory Method
+    * B) Singleton
+    * C) Abstract Factory
+    * D) Builder
+    * *Answer: B*
+2.  **What is the primary problem with using the `new` operator directly in client code?**
+    * A) It is slower than malloc.
+    * B) It violates the Liskov Substitution Principle.
+    * C) It tightly couples the code to specific concrete classes.
+    * D) It prevents the use of destructors.
+    * *Answer: C*
+3.  **When should you use the Abstract Factory pattern instead of the Factory Method?**
+    * A) When you need to create a single complex object.
+    * B) When you need to create families of related or dependent objects.
+    * C) When you want to ensure only one instance of a class exists.
+    * D) When you want to add optional parameters to a constructor.
+    * *Answer: B*
+
+---
+
+# Lecture 9: Builder Pattern
+**Lecture 9 — 10/7/2025**
+
+## Summary
+This lecture introduces the Builder Pattern, a creational pattern used to construct complex objects step-by-step. It contrasts this with "Telescoping Constructors," an anti-pattern where a class has multiple constructors with increasing numbers of parameters, leading to confusion and maintenance issues.
+
+The Builder pattern separates construction from representation. It typically involves a `Product` (the object), a `Builder` (abstract interface), a `ConcreteBuilder` (implementation), and an optional `Director` (manages the steps). The lecture presents two implementation styles: one using pointers (returning `this` for chaining) and one without pointers (returning references `*this`), emphasizing method chaining for readability.
+
+## Key Definitions, Formulas, or Arguments
+* **Builder Pattern**: constructs complex objects step-by-step. [cite_start]Useful for objects with multiple configurations or optional parameters[cite: 3313].
+* **Telescoping Constructors**: A pattern of overloading constructors (e.g., `Car()`, `Car(engine)`, `Car(engine, seats)`).
+    * [cite_start]*Cons*: Hard to maintain, error-prone, hard to read[cite: 3690].
+* [cite_start]**Director**: Optional class that defines the order of building steps to create specific configurations (e.g., `constructSportsCar`)[cite: 3390].
+* [cite_start]**Method Chaining**: Returning a reference/pointer to the builder object in setter methods to allow `builder.setA().setB().build()` syntax[cite: 3933].
+
+## Diagram Insights
+* **UML Class Diagram (Pages 5-10)**: The text references a standard Builder UML diagram containing:
+    * **Director**: Has a `construct(builder)` method.
+    * **Builder**: Abstract interface with `buildPart()`.
+    * **ConcreteBuilder**: Implements `buildPart()` and `getResult()`.
+    * **Product**: The complex object being built.
+    * *Significance*: This visualizes the separation of concerns—the Director knows *how* to build, the Builder knows *what* to build, and the ConcreteBuilder knows *how to assemble* the specific parts.
+
+## Questions/Next Steps
+* Review the syntax for Method Chaining in C++ (`return *this` vs `return this`).
+* Understand why the Director is optional (the Client can control the Builder directly if a specific sequence isn't required).
+
+## Cheat Sheet
+* **Problem**: Object requires 10 parameters, many optional.
+* **Bad Solution**: `Car(int, string, bool, int, ...)` (Telescoping).
+* **Good Solution**: `CarBuilder().setSeats(4).setEngine("V8").build()`.
+* **Components**: Product, Builder, ConcreteBuilder, Director.
+
+## Final Exam Key Insights
+* Builder is preferred over Telescoping Constructors when parameters are numerous or optional.
+* The Builder pattern produces an immutable product in many designs (though the lecture example allows modification via setters, the pattern often aims for a final `build()` step).
+* Be able to identify the "Method Chaining" syntax in code.
+
+## Potential Multiple Choice Questions
+1.  **Which issue is the Builder Pattern primarily designed to solve?**
+    * A) Circular dependencies between classes.
+    * B) The complexity of "Telescoping Constructors" with many parameters.
+    * C) Ensuring only one instance of a class exists.
+    * D) Creating families of related objects.
+    * *Answer: B*
+2.  **In the Builder Pattern, what is the role of the Director?**
+    * A) It defines the abstract interface for creating parts.
+    * B) It implements the specific construction steps.
+    * C) It manages the construction process and order of steps.
+    * D) It represents the complex object being built.
+    * *Answer: C*
+3.  **What enables "Method Chaining" (e.g., `builder.setA().setB()`) in the Builder pattern?**
+    * A) The build method returning void.
+    * B) The setter methods returning the Builder object itself (or a reference/pointer).
+    * C) Passing the Builder to the Director.
+    * D) Using static methods for all setters.
+    * *Answer: B*

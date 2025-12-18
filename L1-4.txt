@@ -1,0 +1,250 @@
+# Lecture 1: Introduction to Object-Oriented Design and Analysis
+**Lecture 1 — 9/4/2025**
+
+## Summary
+This lecture introduces the foundational concepts of Object-Oriented Design and Analysis (OODA), contrasting it with Functional Programming. It defines the core building blocks of OOP: Objects (entities with attributes and behaviors) and Classes (blueprints for objects). The lecture emphasizes that OODA views software as a network of communicating objects, whereas functional programming focuses on immutable data and pure functions.
+
+A significant portion of the lecture is dedicated to software design quality metrics: **Cohesion** and **Coupling**. High cohesion (modules focused on a single task) and low coupling (minimal dependencies between modules) are presented as the ideal design state. The lecture concludes by outlining the advantages of OOP, such as modularity, reusability, and maintainability, and provides an overview of the course project and deliverables.
+
+## Key Definitions, Formulas, or Arguments
+* **Object:** A real-world entity consisting of attributes (data) and behaviors (methods).
+* **Class:** A blueprint or template used to create objects.
+* **Cohesion:** The degree to which elements inside a module belong together. **High Cohesion** is desirable (e.g., a `ShoppingCart` class only handles cart operations).
+* **Coupling:** The degree of dependency between modules. **Low Coupling** is desirable to ensure changes in one module do not break others.
+* **Access Specifiers:**
+    * `Private`: Accessible only within the class.
+    * `Public`: Accessible from outside the class.
+    * `Protected`: Accessible in the class and derived classes.
+* **Functional Programming vs. OOP:**
+    * *OOP:* Mutable state, objects, inheritance, good for modeling real-world entities.
+    * *Functional:* Immutable state, pure functions, composition, good for concurrency and data transformation.
+
+## Diagram Insights
+* **None.** (The lecture slides primarily use code snippets and bullet points to illustrate concepts.)
+
+## Questions/Next Steps
+* Review the specific syntax for C++ classes (headers, methods) as the course relies heavily on C++.
+* Clarify the distinction between "Aggregation" and "Composition" if not fully clear yet, as this is hinted at in relationship discussions.
+
+## Cheat Sheet Section
+* **Ideal Design:** High Cohesion + Low Coupling.
+* **Worst Design:** Low Cohesion + High Coupling.
+* **OOP Pillars (Intro):** Encapsulation, Inheritance, Polymorphism (detailed in later lectures).
+* **C++ Basics:** `class Name { public: ... private: ... };`
+
+## Final Exam Key Insights (Based on Sample Exam)
+* **Cohesion vs. Coupling:** Expect questions asking you to identify if a code snippet exhibits high/low cohesion or tight/loose coupling. The sample exam focuses heavily on design patterns which solve coupling issues.
+* **OOP vs Functional:** Be ready to compare them. Know that OOP handles state changes (mutability) while Functional programming emphasizes immutability.
+* **Refactoring:** The exam requires refactoring code. Understand how moving code into specific classes improves Cohesion.
+
+## Potential Multiple Choice Questions
+1.  **Which combination of Cohesion and Coupling is considered the ideal state for software design?**
+    * a) Low Cohesion, Low Coupling
+    * b) High Cohesion, High Coupling
+    * c) High Cohesion, Low Coupling
+    * d) Low Cohesion, High Coupling
+    * **Answer:** c
+
+2.  **In C++, which access specifier allows members to be accessed by derived classes but not by the outside world?**
+    * a) Private
+    * b) Public
+    * c) Protected
+    * d) Friend
+    * **Answer:** c
+
+3.  **Which of the following is a key characteristic of Functional Programming compared to OOP?**
+    * a) Use of mutable state within objects
+    * b) Emphasis on immutability and pure functions
+    * c) Modeling systems as networks of communicating objects
+    * d) Heavy reliance on inheritance hierarchies
+    * **Answer:** b
+
+---
+
+# Lecture 2: Encapsulation and Dependency Injection
+**Lecture 2 — 9/9/2025**
+
+## Summary
+This lecture deepens the discussion on **Encapsulation**, defined as bundling data and methods while restricting direct access to internal state (Data Hiding). It highlights the use of Getters and Setters to control access and validation. The core of the lecture analyzes **Coupling** through four dependency patterns, ranging from rigid (Concrete + Instantiate) to flexible (Abstract + Inject).
+
+The lecture introduces the "Dependency Inversion Principle" (DIP) implicitly by advocating for "Abstract + Inject" as the best approach. It creates a hierarchy of design choices: using **Interfaces** for behavioral variation, **Parameters** for data variation, and **Concretes** only for simple/trivial cases.
+
+## Key Definitions, Formulas, or Arguments
+* **Encapsulation:** Bundling data and methods; protecting internal state using `private` and exposing functionality via `public`.
+* **Dependency Patterns (Ranked Worst to Best):**
+    1.  **Concrete + Instantiate:** Class creates and owns specific concrete objects (Composition). Hard to test/change.
+    2.  **Concrete + Inject:** Class receives a concrete object. Better, but still tied to specific implementation.
+    3.  **Abstract + Instantiate:** Class depends on interface but creates the object itself. Still rigid.
+    4.  **Abstract + Inject (Best):** Class depends on interface; implementation is injected (Aggregation). Enables Polymorphism and Testing.
+* **Rule of Thumb:**
+    * Behavioral variation $\rightarrow$ Use **Interfaces**.
+    * Data variation $\rightarrow$ Use **Parameters** (Constructor args).
+    * Simple case $\rightarrow$ Use **Concrete** classes.
+
+## Diagram Insights
+* **None.** (The lecture uses code examples to illustrate the four dependency patterns rather than visual diagrams.)
+
+## Questions/Next Steps
+* Practice writing "Abstract + Inject" code in C++ using constructors.
+* Review the difference between "Composition" (ownership, created inside) and "Aggregation" (passed in, created outside).
+
+## Cheat Sheet Section
+* **Pattern to Memorize:** `class Consumer { IService& svc; public: Consumer(IService& s) : svc(s) {} };` (Abstract + Inject).
+* **When to subclass?** Only if *behavior* (algorithms) changes.
+* **When to use parameters?** If only *data* (strings, numbers) changes.
+
+## Final Exam Key Insights (Based on Sample Exam)
+* **Dependency Injection:** The sample exam's "Unit Testing" section (Section IV) explicitly asks for Dependency Injection (DI) to mock dependencies. This lecture is the theoretical foundation for that.
+* **Refactoring:** Questions 3.1–3.9 in the exam require refactoring tight coupling (Concrete + Instantiate) into loose coupling (Abstract + Inject/Factory/Strategy).
+* **SOLID Principles:** This lecture covers the 'D' (Dependency Inversion) and 'O' (Open/Closed) in SOLID.
+
+## Potential Multiple Choice Questions
+1.  **Which dependency pattern offers the highest flexibility and testability?**
+    * a) Concrete + Instantiate
+    * b) Abstract + Instantiate
+    * c) Concrete + Inject
+    * d) Abstract + Inject
+    * **Answer:** d
+
+2.  **If two classes differ only by the text string they print to the console, how should this be modeled?**
+    * a) Create an Interface and two subclasses.
+    * b) Use a single class with a constructor parameter for the string.
+    * c) Use the Abstract Factory pattern.
+    * d) Use the Decorator pattern.
+    * **Answer:** b
+
+3.  **What is the primary benefit of Encapsulation?**
+    * a) It allows unrestricted access to object data.
+    * b) It protects the object's internal state and allows implementation changes without affecting clients.
+    * c) It increases the coupling between classes.
+    * d) It eliminates the need for constructor functions.
+    * **Answer:** b
+
+---
+
+# Lecture 3: Pointers and Memory Management
+**Lecture 3 — 9/11/2025**
+
+## Summary
+This lecture covers essential C++ memory concepts required for OODA implementation. It explains **Pointers** (variables storing memory addresses) and **References** (aliases), emphasizing safety with `nullptr`. It details the memory segments: **Stack** (local variables, automatic cleanup) vs. **Heap** (dynamic memory via `new`/`delete`, manual cleanup).
+
+The lecture connects pointers to OOP via **Polymorphism**. It demonstrates how base class pointers can store derived class objects to enable dynamic behavior (virtual functions). It also warns about "Slicing" (assigning a derived object to a base *value* instead of a pointer/reference), which strips away derived data.
+
+## Key Definitions, Formulas, or Arguments
+* **Pointer (`*`):** Stores address. Can be `nullptr`. Re-assignable. `->` used to access members.
+* **Reference (`&`):** Alias for an existing variable. Cannot be null. Cannot be re-assigned. `.` used to access members.
+* **Memory Segments:**
+    * *Stack:* Fast, local variables, auto-destroyed when function ends.
+    * *Heap:* Large, dynamic (`new`), requires manual `delete`.
+* **Polymorphism:** `Base* ptr = new Derived();` allows `ptr->method()` to call the Derived version if `method` is `virtual`.
+* **Slicing:** `Base b = Derived();` Only copies the Base part of Derived, losing specific behavior.
+
+## Diagram Insights
+* **Memory Layout (Stack/Heap):**  (Slide 10) Visualizes the memory as a vertical block: Heap (top, grows down), Stack (middle, grows up), Static/Global, and Code (bottom). *Insight: Understanding where variables live helps predict their lifetime.*
+* **UML Class Diagrams (implied in examples):** Code examples imply relationships like Inheritance (Dog is-a Animal) and Dependency (Computer has-a Mouse pointer).
+
+## Questions/Next Steps
+* Review `virtual` destructors. (Why must the base class destructor be virtual? To ensure the derived destructor is called when deleting via a base pointer).
+* Practice the syntax for `delete` vs `delete[]` for arrays.
+
+## Cheat Sheet Section
+* **Declaration:** `int* p = &x;` (Pointer to x), `int& r = x;` (Reference to x).
+* **Heap:** `Type* p = new Type();` ... `delete p;`
+* **Polymorphism:** ALWAYS use pointers or references (`Base*` or `Base&`), NEVER value (`Base b`) to avoid slicing.
+* **Safe Delete:** `if (p) { delete p; p = nullptr; }`
+
+## Final Exam Key Insights (Based on Sample Exam)
+* **Pointer Dereferencing:** Section II of the sample exam is entirely about pointer logic (`*p`, `**q`, `&x`). Master the "address of" vs "value at" syntax.
+* **Memory Management:** Questions on the exam often involve `new` in constructors and `delete` in destructors (RAII principle).
+* **Abstract Classes:** The exam asks for Refactoring using Interfaces (Abstract Classes). You must know how to declare pure virtual functions: `virtual void method() = 0;`.
+
+## Potential Multiple Choice Questions
+1.  **What happens if you delete a pointer that has already been deleted (double free)?**
+    * a) The program sets it to null automatically.
+    * b) The program ignores the command.
+    * c) Undefined behavior (often a crash).
+    * d) It frees the memory again safely.
+    * **Answer:** c
+
+2.  **Which of the following causes Object Slicing?**
+    * a) `Base* b = new Derived();`
+    * b) `Base& b = derivedObject;`
+    * c) `Base b = derivedObject;`
+    * d) `Derived* d = new Derived();`
+    * **Answer:** c
+
+3.  **In the memory model, where are local variables within a function typically stored?**
+    * a) Heap
+    * b) Stack
+    * c) Global/Static Area
+    * d) Code Segment
+    * **Answer:** b
+
+---
+
+# Lecture 4: Requirements and UML
+**Lecture 4 — 9/16/2025**
+
+## Summary
+This lecture shifts focus to the "Analysis" phase of OODA. It covers **Requirements Gathering** (Interviews, Questionnaires, Observation) and distinguishing between **Functional Requirements** (what the system does) and **Non-Functional Requirements** (performance, security, reliability).
+
+It introduces **UML (Unified Modeling Language)** as the standard for visualizing systems. The lecture details three diagram types:
+1.  **Use Case Diagrams:** System goals, Actors, and relationships (Include/Extend).
+2.  **Class Diagrams:** Static structure, classes (attributes/methods), and relationships (Association, Inheritance, Composition).
+3.  **Sequence Diagrams:** Dynamic behavior, showing object interactions/messages over time.
+
+## Key Definitions, Formulas, or Arguments
+* **Functional Requirement:** "User can login," "System sends email." (Maps to methods).
+* **Non-Functional Requirement:** "Must handle 10k users," "Response < 2s." (Maps to architecture/constraints).
+* **Use Case Relationships:**
+    * `<<include>>`: Mandatory/shared behavior.
+    * `<<extend>>`: Optional behavior.
+    * *Actor:* External entity (User, Bank System).
+* **Class Relationships:**
+    * *Association:* "Has-a" (Solid line).
+    * *Inheritance:* "Is-a" (Arrow with hollow triangle).
+    * *Composition:* "Strong ownership" (Filled diamond).
+* **Sequence Diagram:** Shows time (vertical axis) and message passing (horizontal arrows) between objects.
+
+## Diagram Insights
+* **Use Case Diagram (Banking App):** (Slide 22) Shows Actors (Customer, Bank) and cases (Login, Transfer Funds). *Insight: Note the `<<include>>` relationship between "Login" and "Verify Password" (Login *requires* verification).*
+* **Class Diagram (Shopping Cart):** (Slide 27) Shows classes (Customer, Order, Cart) with +/- notation for public/private. *Insight: Shows Multiplicity (`1` to `0..*`) indicating one customer can have many orders.*
+* **Sequence Diagram (ATM):** (Slide 32) Shows the flow: User inserts card $\rightarrow$ ATM verifies $\rightarrow$ Bank Server responds. *Insight: The vertical dashed lines represent the lifespan of the object during the transaction.*
+
+## Questions/Next Steps
+* Practice distinguishing `<<include>>` vs `<<extend>>`. (Tip: Include is "always", Extend is "sometimes").
+* Learn to map natural language requirements ("User places order") to Class Diagrams (Classes: User, Order; Method: `placeOrder()`).
+
+## Cheat Sheet Section
+* **UML Arrows:**
+    * $\longrightarrow$ (Open arrow): Association.
+    * $\longrightarrow \triangle$ (Hollow triangle): Inheritance.
+    * $\blacklozenge$ (Filled diamond): Composition (death of parent = death of child).
+    * $\lozenge$ (Hollow diamond): Aggregation (child survives parent).
+* **Visibility:** `+` Public, `-` Private, `#` Protected.
+
+## Final Exam Key Insights (Based on Sample Exam)
+* **UML Drawing:** The Sample Exam explicitly asks for a UML diagram for *every* refactoring task (Sections 3.1–3.9). You must be comfortable drawing Class Diagrams showing inheritance and composition.
+* **Design Patterns:** The UML diagrams in the exam will represent specific patterns (e.g., Strategy, Observer). You need to know how to draw an Interface (often an abstract class in C++) and the classes implementing it.
+
+## Potential Multiple Choice Questions
+1.  **In a Use Case Diagram, which relationship implies that one use case *always* involves the behavior of another?**
+    * a) Association
+    * b) Extension
+    * c) Include
+    * d) Generalization
+    * **Answer:** c
+
+2.  **Which UML diagram is best used to visualize the dynamic flow of messages between objects over time?**
+    * a) Class Diagram
+    * b) Use Case Diagram
+    * c) Sequence Diagram
+    * d) Deployment Diagram
+    * **Answer:** c
+
+3.  **"The system must respond to queries within 500ms" is an example of what type of requirement?**
+    * a) Functional Requirement
+    * b) Non-Functional Requirement
+    * c) User Story
+    * d) Use Case
+    * **Answer:** b
