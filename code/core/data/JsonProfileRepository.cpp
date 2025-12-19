@@ -56,6 +56,15 @@ Profile JsonProfileRepository::loadProfile(QString* error) {
         profile.restoreSkill(skillName, mastery, attempts);
     }
 
+    const auto completedUnitsObj = obj.value("completedUnits").toObject();
+    for (auto it = completedUnitsObj.begin(); it != completedUnitsObj.end(); ++it) {
+        const QString streamId = it.key();
+        const auto unitArray = it.value().toArray();
+        for (const auto& unitValue : unitArray) {
+            profile.markUnitCompleted(streamId, unitValue.toString());
+        }
+    }
+
     return profile;
 }
 
@@ -83,6 +92,16 @@ bool JsonProfileRepository::saveProfile(const Profile& profile, QString* error) 
         skills.append(skillObj);
     }
     obj.insert("skills", skills);
+
+    QJsonObject completedUnits;
+    for (auto it = profile.completedUnitMap().begin(); it != profile.completedUnitMap().end(); ++it) {
+        QJsonArray unitArray;
+        for (const auto& unitId : it.value()) {
+            unitArray.append(unitId);
+        }
+        completedUnits.insert(it.key(), unitArray);
+    }
+    obj.insert("completedUnits", completedUnits);
 
     QJsonDocument doc(obj);
     file.write(doc.toJson());

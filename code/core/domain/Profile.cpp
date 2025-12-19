@@ -1,7 +1,7 @@
 #include "Profile.h"
 
 Profile::Profile(const QString& name)
-    : m_name(name), m_xp(0), m_streak(0) {}
+    : m_name(name.isEmpty() ? QString("Hardik") : name), m_xp(0), m_streak(0) {}
 
 QString Profile::name() const {
     return m_name;
@@ -47,6 +47,23 @@ void Profile::restoreSkill(const QString& skillName, int mastery, int attempts) 
         m_skills.insert(skillName, SkillProgress(skillName));
     }
     m_skills[skillName].restore(mastery, attempts);
+}
+
+void Profile::markUnitCompleted(const QString& streamId, const QString& unitId) {
+    m_completedUnits[streamId].insert(unitId);
+    notifyProfileUpdated(*this);
+}
+
+bool Profile::isUnitCompleted(const QString& streamId, const QString& unitId) const {
+    return m_completedUnits.value(streamId).contains(unitId);
+}
+
+QSet<QString> Profile::completedUnits(const QString& streamId) const {
+    return m_completedUnits.value(streamId);
+}
+
+const QMap<QString, QSet<QString>>& Profile::completedUnitMap() const {
+    return m_completedUnits;
 }
 
 const QMap<QString, SkillProgress>& Profile::skills() const {

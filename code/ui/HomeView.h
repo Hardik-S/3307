@@ -11,10 +11,11 @@ public:
     explicit HomeView(QWidget* parent = nullptr);
 
 signals:
-    void startLessonRequested();
+    void startStreamRequested(const QString& streamId);
     void profileRequested();
 
 private:
-    QPushButton* m_startButton;
+    QPushButton* m_nepaliButton;
+    QPushButton* m_kannadaButton;
     QPushButton* m_profileButton;
 };

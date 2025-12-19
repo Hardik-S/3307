@@ -1,49 +1,2583 @@
 {
-  "exercises": [
+  "streams": [
     {
-      "type": "MCQ",
-      "spec": {
-        "id": "mcq-001",
-        "prompt": "Which is the Hindi word for 'water'?",
-        "choices": ["पानी", "आग", "हवा", "मिट्टी"],
-        "correctIndex": 0
-      }
+      "id": "nepali",
+      "name": "Learn Nepali",
+      "language": "Nepali",
+      "units": [
+        {
+          "id": "nepali-greetings-1",
+          "title": "Greetings 1",
+          "exercises": [
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "np-greet-01",
+                "prompt": "Select the correct translation for 'Hello'",
+                "choices": [
+                  "नमस्ते",
+                  "धन्यवाद",
+                  "शुभ प्रभात",
+                  "पानी"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/namaste.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "np-greet-02",
+                "prompt": "Translate to Nepali: Thank you",
+                "answers": [
+                  "धन्यवाद",
+                  "dhanyabad",
+                  "dhanyabaad"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "अ",
+                  "आ",
+                  "इ",
+                  "ई",
+                  "उ",
+                  "ऊ",
+                  "ए",
+                  "ऐ",
+                  "ओ",
+                  "औ",
+                  "क",
+                  "ख",
+                  "ग",
+                  "घ",
+                  "ङ",
+                  "च",
+                  "छ",
+                  "ज",
+                  "झ",
+                  "ञ",
+                  "ट",
+                  "ठ",
+                  "ड",
+                  "ढ",
+                  "ण",
+                  "त",
+                  "थ",
+                  "द",
+                  "ध",
+                  "न",
+                  "प",
+                  "फ",
+                  "ब",
+                  "भ",
+                  "म",
+                  "य",
+                  "र",
+                  "ल",
+                  "व",
+                  "श",
+                  "ष",
+                  "स",
+                  "ह",
+                  "ा",
+                  "ि",
+                  "ी",
+                  "ु",
+                  "ू",
+                  "े",
+                  "ै",
+                  "ो",
+                  "ौ",
+                  "ँ",
+                  "्",
+                  "ः"
+                ],
+                "audioPath": "assets/audio/dhanyabad.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "np-greet-03",
+                "prompt": "What does 'शुभ प्रभात' mean?",
+                "choices": [
+                  "Good morning",
+                  "Good night",
+                  "Hello",
+                  "Please"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/shubha-prabhat.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "nepali-greetings-2",
+          "title": "Greetings 2",
+          "exercises": [
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "np-greet-04",
+                "prompt": "Translate to Nepali: Good morning",
+                "answers": [
+                  "शुभ प्रभात",
+                  "shubha prabhat"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "अ",
+                  "आ",
+                  "इ",
+                  "ई",
+                  "उ",
+                  "ऊ",
+                  "ए",
+                  "ऐ",
+                  "ओ",
+                  "औ",
+                  "क",
+                  "ख",
+                  "ग",
+                  "घ",
+                  "ङ",
+                  "च",
+                  "छ",
+                  "ज",
+                  "झ",
+                  "ञ",
+                  "ट",
+                  "ठ",
+                  "ड",
+                  "ढ",
+                  "ण",
+                  "त",
+                  "थ",
+                  "द",
+                  "ध",
+                  "न",
+                  "प",
+                  "फ",
+                  "ब",
+                  "भ",
+                  "म",
+                  "य",
+                  "र",
+                  "ल",
+                  "व",
+                  "श",
+                  "ष",
+                  "स",
+                  "ह",
+                  "ा",
+                  "ि",
+                  "ी",
+                  "ु",
+                  "ू",
+                  "े",
+                  "ै",
+                  "ो",
+                  "ौ",
+                  "ँ",
+                  "्",
+                  "ः"
+                ],
+                "audioPath": "assets/audio/shubha-prabhat.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "np-greet-05",
+                "prompt": "What does 'कस्तो छ?' mean?",
+                "choices": [
+                  "How are you?",
+                  "Where are you?",
+                  "Thank you",
+                  "Goodbye"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/kasto-cha.mp3"
+              }
+            },
+            {
+              "type": "TileOrder",
+              "spec": {
+                "id": "np-greet-06",
+                "prompt": "Arrange to say 'Thank you very much'",
+                "tiles": [
+                  "धन्यवाद",
+                  "धेरै"
+                ],
+                "correctOrder": [
+                  "धेरै",
+                  "धन्यवाद"
+                ],
+                "audioPath": "assets/audio/dhanyabad.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "nepali-greetings-3",
+          "title": "Greetings 3",
+          "exercises": [
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "np-greet-07",
+                "prompt": "Translate to Nepali: Hello",
+                "answers": [
+                  "नमस्ते",
+                  "namaste"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "अ",
+                  "आ",
+                  "इ",
+                  "ई",
+                  "उ",
+                  "ऊ",
+                  "ए",
+                  "ऐ",
+                  "ओ",
+                  "औ",
+                  "क",
+                  "ख",
+                  "ग",
+                  "घ",
+                  "ङ",
+                  "च",
+                  "छ",
+                  "ज",
+                  "झ",
+                  "ञ",
+                  "ट",
+                  "ठ",
+                  "ड",
+                  "ढ",
+                  "ण",
+                  "त",
+                  "थ",
+                  "द",
+                  "ध",
+                  "न",
+                  "प",
+                  "फ",
+                  "ब",
+                  "भ",
+                  "म",
+                  "य",
+                  "र",
+                  "ल",
+                  "व",
+                  "श",
+                  "ष",
+                  "स",
+                  "ह",
+                  "ा",
+                  "ि",
+                  "ी",
+                  "ु",
+                  "ू",
+                  "े",
+                  "ै",
+                  "ो",
+                  "ौ",
+                  "ँ",
+                  "्",
+                  "ः"
+                ],
+                "audioPath": "assets/audio/namaste.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "np-greet-08",
+                "prompt": "What does 'धन्यवाद' mean?",
+                "choices": [
+                  "Thank you",
+                  "Goodbye",
+                  "Please",
+                  "Water"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/dhanyabad.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "np-greet-09",
+                "prompt": "Translate to Nepali: How are you?",
+                "answers": [
+                  "कस्तो छ?",
+                  "kasto cha"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "अ",
+                  "आ",
+                  "इ",
+                  "ई",
+                  "उ",
+                  "ऊ",
+                  "ए",
+                  "ऐ",
+                  "ओ",
+                  "औ",
+                  "क",
+                  "ख",
+                  "ग",
+                  "घ",
+                  "ङ",
+                  "च",
+                  "छ",
+                  "ज",
+                  "झ",
+                  "ञ",
+                  "ट",
+                  "ठ",
+                  "ड",
+                  "ढ",
+                  "ण",
+                  "त",
+                  "थ",
+                  "द",
+                  "ध",
+                  "न",
+                  "प",
+                  "फ",
+                  "ब",
+                  "भ",
+                  "म",
+                  "य",
+                  "र",
+                  "ल",
+                  "व",
+                  "श",
+                  "ष",
+                  "स",
+                  "ह",
+                  "ा",
+                  "ि",
+                  "ी",
+                  "ु",
+                  "ू",
+                  "े",
+                  "ै",
+                  "ो",
+                  "ौ",
+                  "ँ",
+                  "्",
+                  "ः"
+                ],
+                "audioPath": "assets/audio/kasto-cha.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "nepali-food-1",
+          "title": "Food 1",
+          "exercises": [
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "np-food-01",
+                "prompt": "Translate to Nepali: Rice",
+                "answers": [
+                  "भात",
+                  "bhat",
+                  "bhaat"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "अ",
+                  "आ",
+                  "इ",
+                  "ई",
+                  "उ",
+                  "ऊ",
+                  "ए",
+                  "ऐ",
+                  "ओ",
+                  "औ",
+                  "क",
+                  "ख",
+                  "ग",
+                  "घ",
+                  "ङ",
+                  "च",
+                  "छ",
+                  "ज",
+                  "झ",
+                  "ञ",
+                  "ट",
+                  "ठ",
+                  "ड",
+                  "ढ",
+                  "ण",
+                  "त",
+                  "थ",
+                  "द",
+                  "ध",
+                  "न",
+                  "प",
+                  "फ",
+                  "ब",
+                  "भ",
+                  "म",
+                  "य",
+                  "र",
+                  "ल",
+                  "व",
+                  "श",
+                  "ष",
+                  "स",
+                  "ह",
+                  "ा",
+                  "ि",
+                  "ी",
+                  "ु",
+                  "ू",
+                  "े",
+                  "ै",
+                  "ो",
+                  "ौ",
+                  "ँ",
+                  "्",
+                  "ः"
+                ],
+                "audioPath": "assets/audio/bhat.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "np-food-02",
+                "prompt": "What does 'दाल' mean?",
+                "choices": [
+                  "Rice",
+                  "Lentils",
+                  "Vegetables",
+                  "Tea"
+                ],
+                "correctIndex": 1,
+                "audioPath": "assets/audio/dal.mp3"
+              }
+            },
+            {
+              "type": "TileOrder",
+              "spec": {
+                "id": "np-food-03",
+                "prompt": "Arrange to say 'I want tea'",
+                "tiles": [
+                  "चिया",
+                  "चाहिन्छ",
+                  "मलाई"
+                ],
+                "correctOrder": [
+                  "मलाई",
+                  "चिया",
+                  "चाहिन्छ"
+                ],
+                "audioPath": "assets/audio/chiya-chahincha.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "nepali-food-2",
+          "title": "Food 2",
+          "exercises": [
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "np-food-04",
+                "prompt": "Translate to Nepali: Vegetables",
+                "answers": [
+                  "तरकारी",
+                  "tarkari"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "अ",
+                  "आ",
+                  "इ",
+                  "ई",
+                  "उ",
+                  "ऊ",
+                  "ए",
+                  "ऐ",
+                  "ओ",
+                  "औ",
+                  "क",
+                  "ख",
+                  "ग",
+                  "घ",
+                  "ङ",
+                  "च",
+                  "छ",
+                  "ज",
+                  "झ",
+                  "ञ",
+                  "ट",
+                  "ठ",
+                  "ड",
+                  "ढ",
+                  "ण",
+                  "त",
+                  "थ",
+                  "द",
+                  "ध",
+                  "न",
+                  "प",
+                  "फ",
+                  "ब",
+                  "भ",
+                  "म",
+                  "य",
+                  "र",
+                  "ल",
+                  "व",
+                  "श",
+                  "ष",
+                  "स",
+                  "ह",
+                  "ा",
+                  "ि",
+                  "ी",
+                  "ु",
+                  "ू",
+                  "े",
+                  "ै",
+                  "ो",
+                  "ौ",
+                  "ँ",
+                  "्",
+                  "ः"
+                ],
+                "audioPath": "assets/audio/tarkari.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "np-food-05",
+                "prompt": "Select the correct translation for 'I am hungry'",
+                "choices": [
+                  "मलाई भोक लाग्यो",
+                  "म ठीक छु",
+                  "म खुशी छु",
+                  "मलाई तिर्खा लाग्यो"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/bhok-lagyo.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "np-food-06",
+                "prompt": "Translate to Nepali: Water",
+                "answers": [
+                  "पानी",
+                  "pani",
+                  "paani"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "अ",
+                  "आ",
+                  "इ",
+                  "ई",
+                  "उ",
+                  "ऊ",
+                  "ए",
+                  "ऐ",
+                  "ओ",
+                  "औ",
+                  "क",
+                  "ख",
+                  "ग",
+                  "घ",
+                  "ङ",
+                  "च",
+                  "छ",
+                  "ज",
+                  "झ",
+                  "ञ",
+                  "ट",
+                  "ठ",
+                  "ड",
+                  "ढ",
+                  "ण",
+                  "त",
+                  "थ",
+                  "द",
+                  "ध",
+                  "न",
+                  "प",
+                  "फ",
+                  "ब",
+                  "भ",
+                  "म",
+                  "य",
+                  "र",
+                  "ल",
+                  "व",
+                  "श",
+                  "ष",
+                  "स",
+                  "ह",
+                  "ा",
+                  "ि",
+                  "ी",
+                  "ु",
+                  "ू",
+                  "े",
+                  "ै",
+                  "ो",
+                  "ौ",
+                  "ँ",
+                  "्",
+                  "ः"
+                ],
+                "audioPath": "assets/audio/pani.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "nepali-food-3",
+          "title": "Food 3",
+          "exercises": [
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "np-food-07",
+                "prompt": "Select the correct translation for 'Water'",
+                "choices": [
+                  "पानी",
+                  "भात",
+                  "दाल",
+                  "तरकारी"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/pani.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "np-food-08",
+                "prompt": "Translate to Nepali: Lentils",
+                "answers": [
+                  "दाल",
+                  "dal"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "अ",
+                  "आ",
+                  "इ",
+                  "ई",
+                  "उ",
+                  "ऊ",
+                  "ए",
+                  "ऐ",
+                  "ओ",
+                  "औ",
+                  "क",
+                  "ख",
+                  "ग",
+                  "घ",
+                  "ङ",
+                  "च",
+                  "छ",
+                  "ज",
+                  "झ",
+                  "ञ",
+                  "ट",
+                  "ठ",
+                  "ड",
+                  "ढ",
+                  "ण",
+                  "त",
+                  "थ",
+                  "द",
+                  "ध",
+                  "न",
+                  "प",
+                  "फ",
+                  "ब",
+                  "भ",
+                  "म",
+                  "य",
+                  "र",
+                  "ल",
+                  "व",
+                  "श",
+                  "ष",
+                  "स",
+                  "ह",
+                  "ा",
+                  "ि",
+                  "ी",
+                  "ु",
+                  "ू",
+                  "े",
+                  "ै",
+                  "ो",
+                  "ौ",
+                  "ँ",
+                  "्",
+                  "ः"
+                ],
+                "audioPath": "assets/audio/dal.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "np-food-09",
+                "prompt": "What does 'भात' mean?",
+                "choices": [
+                  "Rice",
+                  "Tea",
+                  "Lentils",
+                  "Bread"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/bhat.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "nepali-numbers-1",
+          "title": "Numbers 1",
+          "exercises": [
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "np-num-01",
+                "prompt": "What number does 'एक' represent?",
+                "choices": [
+                  "1",
+                  "2",
+                  "3",
+                  "10"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/ek.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "np-num-02",
+                "prompt": "Translate to Nepali: Five",
+                "answers": [
+                  "पाँच",
+                  "panch",
+                  "paanch"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "अ",
+                  "आ",
+                  "इ",
+                  "ई",
+                  "उ",
+                  "ऊ",
+                  "ए",
+                  "ऐ",
+                  "ओ",
+                  "औ",
+                  "क",
+                  "ख",
+                  "ग",
+                  "घ",
+                  "ङ",
+                  "च",
+                  "छ",
+                  "ज",
+                  "झ",
+                  "ञ",
+                  "ट",
+                  "ठ",
+                  "ड",
+                  "ढ",
+                  "ण",
+                  "त",
+                  "थ",
+                  "द",
+                  "ध",
+                  "न",
+                  "प",
+                  "फ",
+                  "ब",
+                  "भ",
+                  "म",
+                  "य",
+                  "र",
+                  "ल",
+                  "व",
+                  "श",
+                  "ष",
+                  "स",
+                  "ह",
+                  "ा",
+                  "ि",
+                  "ी",
+                  "ु",
+                  "ू",
+                  "े",
+                  "ै",
+                  "ो",
+                  "ौ",
+                  "ँ",
+                  "्",
+                  "ः"
+                ],
+                "audioPath": "assets/audio/panch.mp3"
+              }
+            },
+            {
+              "type": "TileOrder",
+              "spec": {
+                "id": "np-num-03",
+                "prompt": "Arrange the numbers 1, 2, 3",
+                "tiles": [
+                  "दुई",
+                  "एक",
+                  "तीन"
+                ],
+                "correctOrder": [
+                  "एक",
+                  "दुई",
+                  "तीन"
+                ],
+                "audioPath": "assets/audio/counting.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "nepali-numbers-2",
+          "title": "Numbers 2",
+          "exercises": [
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "np-num-04",
+                "prompt": "Select the Nepali word for 'ten'",
+                "choices": [
+                  "नौ",
+                  "दश",
+                  "आठ",
+                  "सात"
+                ],
+                "correctIndex": 1,
+                "audioPath": "assets/audio/das.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "np-num-05",
+                "prompt": "Translate to Nepali: Seven",
+                "answers": [
+                  "सात",
+                  "saat",
+                  "sat"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "अ",
+                  "आ",
+                  "इ",
+                  "ई",
+                  "उ",
+                  "ऊ",
+                  "ए",
+                  "ऐ",
+                  "ओ",
+                  "औ",
+                  "क",
+                  "ख",
+                  "ग",
+                  "घ",
+                  "ङ",
+                  "च",
+                  "छ",
+                  "ज",
+                  "झ",
+                  "ञ",
+                  "ट",
+                  "ठ",
+                  "ड",
+                  "ढ",
+                  "ण",
+                  "त",
+                  "थ",
+                  "द",
+                  "ध",
+                  "न",
+                  "प",
+                  "फ",
+                  "ब",
+                  "भ",
+                  "म",
+                  "य",
+                  "र",
+                  "ल",
+                  "व",
+                  "श",
+                  "ष",
+                  "स",
+                  "ह",
+                  "ा",
+                  "ि",
+                  "ी",
+                  "ु",
+                  "ू",
+                  "े",
+                  "ै",
+                  "ो",
+                  "ौ",
+                  "ँ",
+                  "्",
+                  "ः"
+                ],
+                "audioPath": "assets/audio/saat.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "np-num-06",
+                "prompt": "What number does 'दुई' represent?",
+                "choices": [
+                  "2",
+                  "4",
+                  "6",
+                  "8"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/dui.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "nepali-numbers-3",
+          "title": "Numbers 3",
+          "exercises": [
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "np-num-07",
+                "prompt": "Translate to Nepali: Eight",
+                "answers": [
+                  "आठ",
+                  "aath"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "अ",
+                  "आ",
+                  "इ",
+                  "ई",
+                  "उ",
+                  "ऊ",
+                  "ए",
+                  "ऐ",
+                  "ओ",
+                  "औ",
+                  "क",
+                  "ख",
+                  "ग",
+                  "घ",
+                  "ङ",
+                  "च",
+                  "छ",
+                  "ज",
+                  "झ",
+                  "ञ",
+                  "ट",
+                  "ठ",
+                  "ड",
+                  "ढ",
+                  "ण",
+                  "त",
+                  "थ",
+                  "द",
+                  "ध",
+                  "न",
+                  "प",
+                  "फ",
+                  "ब",
+                  "भ",
+                  "म",
+                  "य",
+                  "र",
+                  "ल",
+                  "व",
+                  "श",
+                  "ष",
+                  "स",
+                  "ह",
+                  "ा",
+                  "ि",
+                  "ी",
+                  "ु",
+                  "ू",
+                  "े",
+                  "ै",
+                  "ो",
+                  "ौ",
+                  "ँ",
+                  "्",
+                  "ः"
+                ],
+                "audioPath": "assets/audio/aath.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "np-num-08",
+                "prompt": "What number does 'नौ' represent?",
+                "choices": [
+                  "9",
+                  "7",
+                  "5",
+                  "1"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/nau.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "np-num-09",
+                "prompt": "Translate to Nepali: Three",
+                "answers": [
+                  "तीन",
+                  "teen"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "अ",
+                  "आ",
+                  "इ",
+                  "ई",
+                  "उ",
+                  "ऊ",
+                  "ए",
+                  "ऐ",
+                  "ओ",
+                  "औ",
+                  "क",
+                  "ख",
+                  "ग",
+                  "घ",
+                  "ङ",
+                  "च",
+                  "छ",
+                  "ज",
+                  "झ",
+                  "ञ",
+                  "ट",
+                  "ठ",
+                  "ड",
+                  "ढ",
+                  "ण",
+                  "त",
+                  "थ",
+                  "द",
+                  "ध",
+                  "न",
+                  "प",
+                  "फ",
+                  "ब",
+                  "भ",
+                  "म",
+                  "य",
+                  "र",
+                  "ल",
+                  "व",
+                  "श",
+                  "ष",
+                  "स",
+                  "ह",
+                  "ा",
+                  "ि",
+                  "ी",
+                  "ु",
+                  "ू",
+                  "े",
+                  "ै",
+                  "ो",
+                  "ौ",
+                  "ँ",
+                  "्",
+                  "ः"
+                ],
+                "audioPath": "assets/audio/teen.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "nepali-review-1",
+          "title": "Mixed Review",
+          "exercises": [
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "np-review-01",
+                "prompt": "What does 'नमस्ते' mean?",
+                "choices": [
+                  "Hello",
+                  "Please",
+                  "Thank you",
+                  "Goodbye"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/namaste.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "np-review-02",
+                "prompt": "Translate to Nepali: Thank you",
+                "answers": [
+                  "धन्यवाद",
+                  "dhanyabad"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "अ",
+                  "आ",
+                  "इ",
+                  "ई",
+                  "उ",
+                  "ऊ",
+                  "ए",
+                  "ऐ",
+                  "ओ",
+                  "औ",
+                  "क",
+                  "ख",
+                  "ग",
+                  "घ",
+                  "ङ",
+                  "च",
+                  "छ",
+                  "ज",
+                  "झ",
+                  "ञ",
+                  "ट",
+                  "ठ",
+                  "ड",
+                  "ढ",
+                  "ण",
+                  "त",
+                  "थ",
+                  "द",
+                  "ध",
+                  "न",
+                  "प",
+                  "फ",
+                  "ब",
+                  "भ",
+                  "म",
+                  "य",
+                  "र",
+                  "ल",
+                  "व",
+                  "श",
+                  "ष",
+                  "स",
+                  "ह",
+                  "ा",
+                  "ि",
+                  "ी",
+                  "ु",
+                  "ू",
+                  "े",
+                  "ै",
+                  "ो",
+                  "ौ",
+                  "ँ",
+                  "्",
+                  "ः"
+                ],
+                "audioPath": "assets/audio/dhanyabad.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "np-review-03",
+                "prompt": "What number does 'पाँच' represent?",
+                "choices": [
+                  "5",
+                  "3",
+                  "2",
+                  "10"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/panch.mp3"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
-      "type": "Translate",
-      "spec": {
-        "id": "tr-001",
-        "prompt": "Translate 'sun' to Hindi.",
-        "answers": ["सूरज", "सूर्य"],
-        "characterSelection": true
-      }
-    },
-    {
-      "type": "TileOrder",
-      "spec": {
-        "id": "tile-001",
-        "prompt": "Order the tiles to say: 'I learn Hindi'.",
-        "tiles": ["हिंदी", "सीखता", "मैं"],
-        "correctOrder": ["मैं", "हिंदी", "सीखता"]
-      }
-    },
-    {
-      "type": "Listen",
-      "spec": {
-        "id": "listen-001",
-        "prompt": "Listen and pick the correct translation.",
-        "audioPath": "assets/sample_audio.wav",
-        "choices": ["Thank you", "Hello", "Goodbye", "Please"],
-        "correctIndex": 1
-      }
-    },
-    {
-      "type": "Speak",
-      "spec": {
-        "id": "speak-001",
-        "prompt": "Say: 'Namaste'.",
-        "expectedKeyword": "namaste"
-      }
+      "id": "kannada",
+      "name": "Learn Kannada",
+      "language": "Kannada",
+      "units": [
+        {
+          "id": "kannada-greetings-1",
+          "title": "Greetings 1",
+          "exercises": [
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "ka-greet-01",
+                "prompt": "Select the correct translation for 'Hello'",
+                "choices": [
+                  "ನಮಸ್ಕಾರ",
+                  "ಧನ್ಯವಾದ",
+                  "ಶುಭೋದಯ",
+                  "ದಯವಿಟ್ಟು"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/namaskara.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "ka-greet-02",
+                "prompt": "Translate to Kannada: Thank you",
+                "answers": [
+                  "ಧನ್ಯವಾದ",
+                  "dhanyavada",
+                  "dhanyavaada"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "ಅ",
+                  "ಆ",
+                  "ಇ",
+                  "ಈ",
+                  "ಉ",
+                  "ಊ",
+                  "ಋ",
+                  "ಎ",
+                  "ಏ",
+                  "ಐ",
+                  "ಒ",
+                  "ಓ",
+                  "ಔ",
+                  "ಕ",
+                  "ಖ",
+                  "ಗ",
+                  "ಘ",
+                  "ಙ",
+                  "ಚ",
+                  "ಛ",
+                  "ಜ",
+                  "ಝ",
+                  "ಞ",
+                  "ಟ",
+                  "ಠ",
+                  "ಡ",
+                  "ಢ",
+                  "ಣ",
+                  "ತ",
+                  "ಥ",
+                  "ದ",
+                  "ಧ",
+                  "ನ",
+                  "ಪ",
+                  "ಫ",
+                  "ಬ",
+                  "ಭ",
+                  "ಮ",
+                  "ಯ",
+                  "ರ",
+                  "ಲ",
+                  "ವ",
+                  "ಶ",
+                  "ಷ",
+                  "ಸ",
+                  "ಹ",
+                  "ಳ",
+                  "ೞ",
+                  "್",
+                  "ಾ",
+                  "ಿ",
+                  "ೀ",
+                  "ು",
+                  "ೂ",
+                  "ೆ",
+                  "ೇ",
+                  "ೈ",
+                  "ೊ",
+                  "ೋ",
+                  "ೌ",
+                  "ಂ",
+                  "ಃ"
+                ],
+                "audioPath": "assets/audio/dhanyavada.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "ka-greet-03",
+                "prompt": "What does 'ಶುಭೋದಯ' mean?",
+                "choices": [
+                  "Good morning",
+                  "Good night",
+                  "Hello",
+                  "Please"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/shubhodaya.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "kannada-greetings-2",
+          "title": "Greetings 2",
+          "exercises": [
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "ka-greet-04",
+                "prompt": "Translate to Kannada: Please",
+                "answers": [
+                  "ದಯವಿಟ್ಟು",
+                  "dayavittu"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "ಅ",
+                  "ಆ",
+                  "ಇ",
+                  "ಈ",
+                  "ಉ",
+                  "ಊ",
+                  "ಋ",
+                  "ಎ",
+                  "ಏ",
+                  "ಐ",
+                  "ಒ",
+                  "ಓ",
+                  "ಔ",
+                  "ಕ",
+                  "ಖ",
+                  "ಗ",
+                  "ಘ",
+                  "ಙ",
+                  "ಚ",
+                  "ಛ",
+                  "ಜ",
+                  "ಝ",
+                  "ಞ",
+                  "ಟ",
+                  "ಠ",
+                  "ಡ",
+                  "ಢ",
+                  "ಣ",
+                  "ತ",
+                  "ಥ",
+                  "ದ",
+                  "ಧ",
+                  "ನ",
+                  "ಪ",
+                  "ಫ",
+                  "ಬ",
+                  "ಭ",
+                  "ಮ",
+                  "ಯ",
+                  "ರ",
+                  "ಲ",
+                  "ವ",
+                  "ಶ",
+                  "ಷ",
+                  "ಸ",
+                  "ಹ",
+                  "ಳ",
+                  "ೞ",
+                  "್",
+                  "ಾ",
+                  "ಿ",
+                  "ೀ",
+                  "ು",
+                  "ೂ",
+                  "ೆ",
+                  "ೇ",
+                  "ೈ",
+                  "ೊ",
+                  "ೋ",
+                  "ೌ",
+                  "ಂ",
+                  "ಃ"
+                ],
+                "audioPath": "assets/audio/dayavittu.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "ka-greet-05",
+                "prompt": "What does 'ನೀವು ಹೇಗಿದ್ದೀರಿ' mean?",
+                "choices": [
+                  "How are you?",
+                  "Where are you?",
+                  "Thank you",
+                  "Goodbye"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/neevu-hegiddiri.mp3"
+              }
+            },
+            {
+              "type": "TileOrder",
+              "spec": {
+                "id": "ka-greet-06",
+                "prompt": "Arrange to say 'How are you?'",
+                "tiles": [
+                  "ಹೇಗಿದ್ದೀರಿ",
+                  "ನೀವು"
+                ],
+                "correctOrder": [
+                  "ನೀವು",
+                  "ಹೇಗಿದ್ದೀರಿ"
+                ],
+                "audioPath": "assets/audio/neevu-hegiddiri.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "kannada-greetings-3",
+          "title": "Greetings 3",
+          "exercises": [
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "ka-greet-07",
+                "prompt": "Translate to Kannada: Hello",
+                "answers": [
+                  "ನಮಸ್ಕಾರ",
+                  "namaskara"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "ಅ",
+                  "ಆ",
+                  "ಇ",
+                  "ಈ",
+                  "ಉ",
+                  "ಊ",
+                  "ಋ",
+                  "ಎ",
+                  "ಏ",
+                  "ಐ",
+                  "ಒ",
+                  "ಓ",
+                  "ಔ",
+                  "ಕ",
+                  "ಖ",
+                  "ಗ",
+                  "ಘ",
+                  "ಙ",
+                  "ಚ",
+                  "ಛ",
+                  "ಜ",
+                  "ಝ",
+                  "ಞ",
+                  "ಟ",
+                  "ಠ",
+                  "ಡ",
+                  "ಢ",
+                  "ಣ",
+                  "ತ",
+                  "ಥ",
+                  "ದ",
+                  "ಧ",
+                  "ನ",
+                  "ಪ",
+                  "ಫ",
+                  "ಬ",
+                  "ಭ",
+                  "ಮ",
+                  "ಯ",
+                  "ರ",
+                  "ಲ",
+                  "ವ",
+                  "ಶ",
+                  "ಷ",
+                  "ಸ",
+                  "ಹ",
+                  "ಳ",
+                  "ೞ",
+                  "್",
+                  "ಾ",
+                  "ಿ",
+                  "ೀ",
+                  "ು",
+                  "ೂ",
+                  "ೆ",
+                  "ೇ",
+                  "ೈ",
+                  "ೊ",
+                  "ೋ",
+                  "ೌ",
+                  "ಂ",
+                  "ಃ"
+                ],
+                "audioPath": "assets/audio/namaskara.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "ka-greet-08",
+                "prompt": "What does 'ಧನ್ಯವಾದ' mean?",
+                "choices": [
+                  "Thank you",
+                  "Hello",
+                  "Please",
+                  "Goodbye"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/dhanyavada.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "ka-greet-09",
+                "prompt": "Translate to Kannada: Good morning",
+                "answers": [
+                  "ಶುಭೋದಯ",
+                  "shubhodaya"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "ಅ",
+                  "ಆ",
+                  "ಇ",
+                  "ಈ",
+                  "ಉ",
+                  "ಊ",
+                  "ಋ",
+                  "ಎ",
+                  "ಏ",
+                  "ಐ",
+                  "ಒ",
+                  "ಓ",
+                  "ಔ",
+                  "ಕ",
+                  "ಖ",
+                  "ಗ",
+                  "ಘ",
+                  "ಙ",
+                  "ಚ",
+                  "ಛ",
+                  "ಜ",
+                  "ಝ",
+                  "ಞ",
+                  "ಟ",
+                  "ಠ",
+                  "ಡ",
+                  "ಢ",
+                  "ಣ",
+                  "ತ",
+                  "ಥ",
+                  "ದ",
+                  "ಧ",
+                  "ನ",
+                  "ಪ",
+                  "ಫ",
+                  "ಬ",
+                  "ಭ",
+                  "ಮ",
+                  "ಯ",
+                  "ರ",
+                  "ಲ",
+                  "ವ",
+                  "ಶ",
+                  "ಷ",
+                  "ಸ",
+                  "ಹ",
+                  "ಳ",
+                  "ೞ",
+                  "್",
+                  "ಾ",
+                  "ಿ",
+                  "ೀ",
+                  "ು",
+                  "ೂ",
+                  "ೆ",
+                  "ೇ",
+                  "ೈ",
+                  "ೊ",
+                  "ೋ",
+                  "ೌ",
+                  "ಂ",
+                  "ಃ"
+                ],
+                "audioPath": "assets/audio/shubhodaya.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "kannada-food-1",
+          "title": "Food 1",
+          "exercises": [
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "ka-food-01",
+                "prompt": "Translate to Kannada: Water",
+                "answers": [
+                  "ನೀರು",
+                  "neeru",
+                  "niru"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "ಅ",
+                  "ಆ",
+                  "ಇ",
+                  "ಈ",
+                  "ಉ",
+                  "ಊ",
+                  "ಋ",
+                  "ಎ",
+                  "ಏ",
+                  "ಐ",
+                  "ಒ",
+                  "ಓ",
+                  "ಔ",
+                  "ಕ",
+                  "ಖ",
+                  "ಗ",
+                  "ಘ",
+                  "ಙ",
+                  "ಚ",
+                  "ಛ",
+                  "ಜ",
+                  "ಝ",
+                  "ಞ",
+                  "ಟ",
+                  "ಠ",
+                  "ಡ",
+                  "ಢ",
+                  "ಣ",
+                  "ತ",
+                  "ಥ",
+                  "ದ",
+                  "ಧ",
+                  "ನ",
+                  "ಪ",
+                  "ಫ",
+                  "ಬ",
+                  "ಭ",
+                  "ಮ",
+                  "ಯ",
+                  "ರ",
+                  "ಲ",
+                  "ವ",
+                  "ಶ",
+                  "ಷ",
+                  "ಸ",
+                  "ಹ",
+                  "ಳ",
+                  "ೞ",
+                  "್",
+                  "ಾ",
+                  "ಿ",
+                  "ೀ",
+                  "ು",
+                  "ೂ",
+                  "ೆ",
+                  "ೇ",
+                  "ೈ",
+                  "ೊ",
+                  "ೋ",
+                  "ೌ",
+                  "ಂ",
+                  "ಃ"
+                ],
+                "audioPath": "assets/audio/neeru.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "ka-food-02",
+                "prompt": "Select the correct translation for 'Rice'",
+                "choices": [
+                  "ಅನ್ನ",
+                  "ರೊಟ್ಟಿ",
+                  "ಸಾರು",
+                  "ಹಾಲು"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/anna.mp3"
+              }
+            },
+            {
+              "type": "TileOrder",
+              "spec": {
+                "id": "ka-food-03",
+                "prompt": "Arrange to say 'I am hungry'",
+                "tiles": [
+                  "ಹಸಿವಾಗಿದೆ",
+                  "ನನಗೆ"
+                ],
+                "correctOrder": [
+                  "ನನಗೆ",
+                  "ಹಸಿವಾಗಿದೆ"
+                ],
+                "audioPath": "assets/audio/nanage-hasivaagide.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "kannada-food-2",
+          "title": "Food 2",
+          "exercises": [
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "ka-food-04",
+                "prompt": "What does 'ಕಾಫಿ' mean?",
+                "choices": [
+                  "Tea",
+                  "Coffee",
+                  "Milk",
+                  "Juice"
+                ],
+                "correctIndex": 1,
+                "audioPath": "assets/audio/coffee.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "ka-food-05",
+                "prompt": "Translate to Kannada: Vegetables",
+                "answers": [
+                  "ತರಕಾರಿ",
+                  "tarakari",
+                  "tarkari"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "ಅ",
+                  "ಆ",
+                  "ಇ",
+                  "ಈ",
+                  "ಉ",
+                  "ಊ",
+                  "ಋ",
+                  "ಎ",
+                  "ಏ",
+                  "ಐ",
+                  "ಒ",
+                  "ಓ",
+                  "ಔ",
+                  "ಕ",
+                  "ಖ",
+                  "ಗ",
+                  "ಘ",
+                  "ಙ",
+                  "ಚ",
+                  "ಛ",
+                  "ಜ",
+                  "ಝ",
+                  "ಞ",
+                  "ಟ",
+                  "ಠ",
+                  "ಡ",
+                  "ಢ",
+                  "ಣ",
+                  "ತ",
+                  "ಥ",
+                  "ದ",
+                  "ಧ",
+                  "ನ",
+                  "ಪ",
+                  "ಫ",
+                  "ಬ",
+                  "ಭ",
+                  "ಮ",
+                  "ಯ",
+                  "ರ",
+                  "ಲ",
+                  "ವ",
+                  "ಶ",
+                  "ಷ",
+                  "ಸ",
+                  "ಹ",
+                  "ಳ",
+                  "ೞ",
+                  "್",
+                  "ಾ",
+                  "ಿ",
+                  "ೀ",
+                  "ು",
+                  "ೂ",
+                  "ೆ",
+                  "ೇ",
+                  "ೈ",
+                  "ೊ",
+                  "ೋ",
+                  "ೌ",
+                  "ಂ",
+                  "ಃ"
+                ],
+                "audioPath": "assets/audio/tarakari.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "ka-food-06",
+                "prompt": "Translate to Kannada: I am hungry",
+                "answers": [
+                  "ನನಗೆ ಹಸಿವಾಗಿದೆ"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "ಅ",
+                  "ಆ",
+                  "ಇ",
+                  "ಈ",
+                  "ಉ",
+                  "ಊ",
+                  "ಋ",
+                  "ಎ",
+                  "ಏ",
+                  "ಐ",
+                  "ಒ",
+                  "ಓ",
+                  "ಔ",
+                  "ಕ",
+                  "ಖ",
+                  "ಗ",
+                  "ಘ",
+                  "ಙ",
+                  "ಚ",
+                  "ಛ",
+                  "ಜ",
+                  "ಝ",
+                  "ಞ",
+                  "ಟ",
+                  "ಠ",
+                  "ಡ",
+                  "ಢ",
+                  "ಣ",
+                  "ತ",
+                  "ಥ",
+                  "ದ",
+                  "ಧ",
+                  "ನ",
+                  "ಪ",
+                  "ಫ",
+                  "ಬ",
+                  "ಭ",
+                  "ಮ",
+                  "ಯ",
+                  "ರ",
+                  "ಲ",
+                  "ವ",
+                  "ಶ",
+                  "ಷ",
+                  "ಸ",
+                  "ಹ",
+                  "ಳ",
+                  "ೞ",
+                  "್",
+                  "ಾ",
+                  "ಿ",
+                  "ೀ",
+                  "ು",
+                  "ೂ",
+                  "ೆ",
+                  "ೇ",
+                  "ೈ",
+                  "ೊ",
+                  "ೋ",
+                  "ೌ",
+                  "ಂ",
+                  "ಃ"
+                ],
+                "audioPath": "assets/audio/nanage-hasivaagide.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "kannada-food-3",
+          "title": "Food 3",
+          "exercises": [
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "ka-food-07",
+                "prompt": "Select the correct translation for 'Rice'",
+                "choices": [
+                  "ಅನ್ನ",
+                  "ಕಾಫಿ",
+                  "ನೀರು",
+                  "ತರಕಾರಿ"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/anna.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "ka-food-08",
+                "prompt": "Translate to Kannada: Water",
+                "answers": [
+                  "ನೀರು",
+                  "neeru"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "ಅ",
+                  "ಆ",
+                  "ಇ",
+                  "ಈ",
+                  "ಉ",
+                  "ಊ",
+                  "ಋ",
+                  "ಎ",
+                  "ಏ",
+                  "ಐ",
+                  "ಒ",
+                  "ಓ",
+                  "ಔ",
+                  "ಕ",
+                  "ಖ",
+                  "ಗ",
+                  "ಘ",
+                  "ಙ",
+                  "ಚ",
+                  "ಛ",
+                  "ಜ",
+                  "ಝ",
+                  "ಞ",
+                  "ಟ",
+                  "ಠ",
+                  "ಡ",
+                  "ಢ",
+                  "ಣ",
+                  "ತ",
+                  "ಥ",
+                  "ದ",
+                  "ಧ",
+                  "ನ",
+                  "ಪ",
+                  "ಫ",
+                  "ಬ",
+                  "ಭ",
+                  "ಮ",
+                  "ಯ",
+                  "ರ",
+                  "ಲ",
+                  "ವ",
+                  "ಶ",
+                  "ಷ",
+                  "ಸ",
+                  "ಹ",
+                  "ಳ",
+                  "ೞ",
+                  "್",
+                  "ಾ",
+                  "ಿ",
+                  "ೀ",
+                  "ು",
+                  "ೂ",
+                  "ೆ",
+                  "ೇ",
+                  "ೈ",
+                  "ೊ",
+                  "ೋ",
+                  "ೌ",
+                  "ಂ",
+                  "ಃ"
+                ],
+                "audioPath": "assets/audio/neeru.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "ka-food-09",
+                "prompt": "What does 'ನೀರು' mean?",
+                "choices": [
+                  "Water",
+                  "Rice",
+                  "Coffee",
+                  "Vegetables"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/neeru.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "kannada-numbers-1",
+          "title": "Numbers 1",
+          "exercises": [
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "ka-num-01",
+                "prompt": "What number does 'ಒಂದು' represent?",
+                "choices": [
+                  "1",
+                  "2",
+                  "3",
+                  "5"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/ondu.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "ka-num-02",
+                "prompt": "Translate to Kannada: Five",
+                "answers": [
+                  "ಐದು",
+                  "aidu",
+                  "aidhu"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "ಅ",
+                  "ಆ",
+                  "ಇ",
+                  "ಈ",
+                  "ಉ",
+                  "ಊ",
+                  "ಋ",
+                  "ಎ",
+                  "ಏ",
+                  "ಐ",
+                  "ಒ",
+                  "ಓ",
+                  "ಔ",
+                  "ಕ",
+                  "ಖ",
+                  "ಗ",
+                  "ಘ",
+                  "ಙ",
+                  "ಚ",
+                  "ಛ",
+                  "ಜ",
+                  "ಝ",
+                  "ಞ",
+                  "ಟ",
+                  "ಠ",
+                  "ಡ",
+                  "ಢ",
+                  "ಣ",
+                  "ತ",
+                  "ಥ",
+                  "ದ",
+                  "ಧ",
+                  "ನ",
+                  "ಪ",
+                  "ಫ",
+                  "ಬ",
+                  "ಭ",
+                  "ಮ",
+                  "ಯ",
+                  "ರ",
+                  "ಲ",
+                  "ವ",
+                  "ಶ",
+                  "ಷ",
+                  "ಸ",
+                  "ಹ",
+                  "ಳ",
+                  "ೞ",
+                  "್",
+                  "ಾ",
+                  "ಿ",
+                  "ೀ",
+                  "ು",
+                  "ೂ",
+                  "ೆ",
+                  "ೇ",
+                  "ೈ",
+                  "ೊ",
+                  "ೋ",
+                  "ೌ",
+                  "ಂ",
+                  "ಃ"
+                ],
+                "audioPath": "assets/audio/aidu.mp3"
+              }
+            },
+            {
+              "type": "TileOrder",
+              "spec": {
+                "id": "ka-num-03",
+                "prompt": "Arrange numbers 1-3 in order",
+                "tiles": [
+                  "ಮೂರು",
+                  "ಒಂದು",
+                  "ಎರಡು"
+                ],
+                "correctOrder": [
+                  "ಒಂದು",
+                  "ಎರಡು",
+                  "ಮೂರು"
+                ],
+                "audioPath": "assets/audio/ondu-eradu-mooru.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "kannada-numbers-2",
+          "title": "Numbers 2",
+          "exercises": [
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "ka-num-04",
+                "prompt": "Select the Kannada word for 'Ten'",
+                "choices": [
+                  "ಎಂಟು",
+                  "ಒಂಬತ್ತು",
+                  "ಹತ್ತು",
+                  "ಏಳು"
+                ],
+                "correctIndex": 2,
+                "audioPath": "assets/audio/hattu.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "ka-num-05",
+                "prompt": "Translate to Kannada: Two",
+                "answers": [
+                  "ಎರಡು",
+                  "eradu",
+                  "eraDu"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "ಅ",
+                  "ಆ",
+                  "ಇ",
+                  "ಈ",
+                  "ಉ",
+                  "ಊ",
+                  "ಋ",
+                  "ಎ",
+                  "ಏ",
+                  "ಐ",
+                  "ಒ",
+                  "ಓ",
+                  "ಔ",
+                  "ಕ",
+                  "ಖ",
+                  "ಗ",
+                  "ಘ",
+                  "ಙ",
+                  "ಚ",
+                  "ಛ",
+                  "ಜ",
+                  "ಝ",
+                  "ಞ",
+                  "ಟ",
+                  "ಠ",
+                  "ಡ",
+                  "ಢ",
+                  "ಣ",
+                  "ತ",
+                  "ಥ",
+                  "ದ",
+                  "ಧ",
+                  "ನ",
+                  "ಪ",
+                  "ಫ",
+                  "ಬ",
+                  "ಭ",
+                  "ಮ",
+                  "ಯ",
+                  "ರ",
+                  "ಲ",
+                  "ವ",
+                  "ಶ",
+                  "ಷ",
+                  "ಸ",
+                  "ಹ",
+                  "ಳ",
+                  "ೞ",
+                  "್",
+                  "ಾ",
+                  "ಿ",
+                  "ೀ",
+                  "ು",
+                  "ೂ",
+                  "ೆ",
+                  "ೇ",
+                  "ೈ",
+                  "ೊ",
+                  "ೋ",
+                  "ೌ",
+                  "ಂ",
+                  "ಃ"
+                ],
+                "audioPath": "assets/audio/eradu.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "ka-num-06",
+                "prompt": "What number does 'ಐದು' represent?",
+                "choices": [
+                  "5",
+                  "2",
+                  "7",
+                  "10"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/aidu.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "kannada-numbers-3",
+          "title": "Numbers 3",
+          "exercises": [
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "ka-num-07",
+                "prompt": "Translate to Kannada: One",
+                "answers": [
+                  "ಒಂದು",
+                  "ondu"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "ಅ",
+                  "ಆ",
+                  "ಇ",
+                  "ಈ",
+                  "ಉ",
+                  "ಊ",
+                  "ಋ",
+                  "ಎ",
+                  "ಏ",
+                  "ಐ",
+                  "ಒ",
+                  "ಓ",
+                  "ಔ",
+                  "ಕ",
+                  "ಖ",
+                  "ಗ",
+                  "ಘ",
+                  "ಙ",
+                  "ಚ",
+                  "ಛ",
+                  "ಜ",
+                  "ಝ",
+                  "ಞ",
+                  "ಟ",
+                  "ಠ",
+                  "ಡ",
+                  "ಢ",
+                  "ಣ",
+                  "ತ",
+                  "ಥ",
+                  "ದ",
+                  "ಧ",
+                  "ನ",
+                  "ಪ",
+                  "ಫ",
+                  "ಬ",
+                  "ಭ",
+                  "ಮ",
+                  "ಯ",
+                  "ರ",
+                  "ಲ",
+                  "ವ",
+                  "ಶ",
+                  "ಷ",
+                  "ಸ",
+                  "ಹ",
+                  "ಳ",
+                  "ೞ",
+                  "್",
+                  "ಾ",
+                  "ಿ",
+                  "ೀ",
+                  "ು",
+                  "ೂ",
+                  "ೆ",
+                  "ೇ",
+                  "ೈ",
+                  "ೊ",
+                  "ೋ",
+                  "ೌ",
+                  "ಂ",
+                  "ಃ"
+                ],
+                "audioPath": "assets/audio/ondu.mp3"
+              }
+            },
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "ka-num-08",
+                "prompt": "What number does 'ಎರಡು' represent?",
+                "choices": [
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/eradu.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "ka-num-09",
+                "prompt": "Translate to Kannada: Ten",
+                "answers": [
+                  "ಹತ್ತು",
+                  "hattu"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "ಅ",
+                  "ಆ",
+                  "ಇ",
+                  "ಈ",
+                  "ಉ",
+                  "ಊ",
+                  "ಋ",
+                  "ಎ",
+                  "ಏ",
+                  "ಐ",
+                  "ಒ",
+                  "ಓ",
+                  "ಔ",
+                  "ಕ",
+                  "ಖ",
+                  "ಗ",
+                  "ಘ",
+                  "ಙ",
+                  "ಚ",
+                  "ಛ",
+                  "ಜ",
+                  "ಝ",
+                  "ಞ",
+                  "ಟ",
+                  "ಠ",
+                  "ಡ",
+                  "ಢ",
+                  "ಣ",
+                  "ತ",
+                  "ಥ",
+                  "ದ",
+                  "ಧ",
+                  "ನ",
+                  "ಪ",
+                  "ಫ",
+                  "ಬ",
+                  "ಭ",
+                  "ಮ",
+                  "ಯ",
+                  "ರ",
+                  "ಲ",
+                  "ವ",
+                  "ಶ",
+                  "ಷ",
+                  "ಸ",
+                  "ಹ",
+                  "ಳ",
+                  "ೞ",
+                  "್",
+                  "ಾ",
+                  "ಿ",
+                  "ೀ",
+                  "ು",
+                  "ೂ",
+                  "ೆ",
+                  "ೇ",
+                  "ೈ",
+                  "ೊ",
+                  "ೋ",
+                  "ೌ",
+                  "ಂ",
+                  "ಃ"
+                ],
+                "audioPath": "assets/audio/hattu.mp3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "kannada-review-1",
+          "title": "Mixed Review",
+          "exercises": [
+            {
+              "type": "MCQ",
+              "spec": {
+                "id": "ka-review-01",
+                "prompt": "What does 'ನಮಸ್ಕಾರ' mean?",
+                "choices": [
+                  "Hello",
+                  "Thank you",
+                  "Please",
+                  "Goodbye"
+                ],
+                "correctIndex": 0,
+                "audioPath": "assets/audio/namaskara.mp3"
+              }
+            },
+            {
+              "type": "Translate",
+              "spec": {
+                "id": "ka-review-02",
+                "prompt": "Translate to Kannada: Thank you",
+                "answers": [
+                  "ಧನ್ಯವಾದ",
+                  "dhanyavada"
+                ],
+                "characterSelection": true,
+                "characterSet": [
+                  "ಅ",
+                  "ಆ",
+                  "ಇ",
+                  "ಈ",
+                  "ಉ",
+                  "ಊ",
+                  "ಋ",
+                  "ಎ",
+                  "ಏ",
+                  "ಐ",
+                  "ಒ",
+                  "ಓ",
+                  "ಔ",
+                  "ಕ",
+                  "ಖ",
+                  "ಗ",
+                  "ಘ",
+                  "ಙ",
+                  "ಚ",
+                  "ಛ",
+                  "ಜ",
+                  "ಝ",
+                  "ಞ",
+                  "ಟ",
+                  "ಠ",
+                  "ಡ",
+                  "ಢ",
+                  "ಣ",
+                  "ತ",
+                  "ಥ",
+                  "ದ",
+                  "ಧ",
+                  "ನ",
+                  "ಪ",
+                  "ಫ",
+                  "ಬ",
+                  "ಭ",
+                  "ಮ",
+                  "ಯ",
+                  "ರ",
+                  "ಲ",
+                  "ವ",
+                  "ಶ",
+                  "ಷ",
+                  "ಸ",
+                  "ಹ",
+                  "ಳ",
+                  "ೞ",
+                  "್",
+                  "ಾ",
+                  "ಿ",
+                  "ೀ",
+                  "ು",
+                  "ೂ",
+                  "ೆ",
+                  "ೇ",
+                  "ೈ",
+                  "ೊ",
+                  "ೋ",
+                  "ೌ",
+                  "ಂ",
+                  "ಃ"
+                ],
+                "audioPath": "assets/audio/dhanyavada.mp3"
+              }
+            },
+            {
+              "type": "TileOrder",
+              "spec": {
+                "id": "ka-review-03",
+                "prompt": "Arrange numbers 1-3",
+                "tiles": [
+                  "ಮೂರು",
+                  "ಒಂದು",
+                  "ಎರಡು"
+                ],
+                "correctOrder": [
+                  "ಒಂದು",
+                  "ಎರಡು",
+                  "ಮೂರು"
+                ],
+                "audioPath": "assets/audio/ondu-eradu-mooru.mp3"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

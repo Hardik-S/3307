@@ -11,22 +11,13 @@ CharacterSelectionWidget::CharacterSelectionWidget(QWidget* parent)
     : QWidget(parent),
       m_display(new QLineEdit(this)),
       m_backspaceButton(new QPushButton("Backspace", this)),
-      m_clearButton(new QPushButton("Clear", this)) {
+      m_clearButton(new QPushButton("Clear", this)),
+      m_gridLayout(new QGridLayout()) {
     m_display->setReadOnly(true);
 
     auto* layout = new QVBoxLayout(this);
     layout->addWidget(m_display);
-
-    auto* grid = new QGridLayout();
-    const auto characters = CharacterUtils::defaultCharacters();
-    const int columns = 6;
-    for (int i = 0; i < characters.size(); ++i) {
-        auto* button = new QPushButton(characters[i], this);
-        button->setProperty("character", characters[i]);
-        connect(button, &QPushButton::clicked, this, &CharacterSelectionWidget::appendCharacter);
-        grid->addWidget(button, i / columns, i % columns);
-    }
-    layout->addLayout(grid);
+    layout->addLayout(m_gridLayout);
 
     auto* controlRow = new QHBoxLayout();
     controlRow->addWidget(m_backspaceButton);
@@ -35,6 +26,8 @@ CharacterSelectionWidget::CharacterSelectionWidget(QWidget* parent)
 
     connect(m_backspaceButton, &QPushButton::clicked, this, &CharacterSelectionWidget::backspace);
     connect(m_clearButton, &QPushButton::clicked, this, &CharacterSelectionWidget::clearSelection);
+
+    setCharacters(CharacterUtils::defaultCharacters());
 }
 
 QString CharacterSelectionWidget::selection() const {
@@ -43,6 +36,11 @@ QString CharacterSelectionWidget::selection() const {
 
 void CharacterSelectionWidget::clear() {
     setSelection({});
+}
+
+void CharacterSelectionWidget::setCharacters(const QStringList& characters) {
+    m_characters = characters.isEmpty() ? CharacterUtils::defaultCharacters() : characters;
+    rebuildGrid();
 }
 
 void CharacterSelectionWidget::appendCharacter() {
@@ -70,4 +68,20 @@ void CharacterSelectionWidget::setSelection(const QString& value) {
     m_selection = value;
     m_display->setText(m_selection);
     emit selectionChanged(m_selection);
+}
+
+void CharacterSelectionWidget::rebuildGrid() {
+    QLayoutItem* item = nullptr;
+    while ((item = m_gridLayout->takeAt(0)) != nullptr) {
+        delete item->widget();
+        delete item;
+    }
+
+    const int columns = 6;
+    for (int i = 0; i < m_characters.size(); ++i) {
+        auto* button = new QPushButton(m_characters[i], this);
+        button->setProperty("character", m_characters[i]);
+        connect(button, &QPushButton::clicked, this, &CharacterSelectionWidget::appendCharacter);
+        m_gridLayout->addWidget(button, i / columns, i % columns);
+    }
 }

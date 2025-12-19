@@ -2,10 +2,14 @@
 
 #include "IContentRepository.h"
 
+#include <vector>
+
+class LearningStream;
+
 class JsonContentRepository : public IContentRepository {
 public:
     explicit JsonContentRepository(const QString& contentPath = QString());
-    QVector<Exercise*> loadExercises(QString* error = nullptr) override;
+    std::vector<LearningStream> loadStreams(QString* error = nullptr) override;
 
 private:
     QString resolveContentPath() const;

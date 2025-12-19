@@ -9,7 +9,9 @@ HEADERS += \
     ui/MainWindow.h \
     ui/HomeView.h \
     ui/LessonView.h \
+    ui/PathView.h \
     ui/ProfileView.h \
+    ui/UnitCompleteDialog.h \
     ui/widgets/CharacterSelectionWidget.h \
     core/controllers/AppController.h \
     core/data/IContentRepository.h \
@@ -36,6 +38,8 @@ HEADERS += \
     core/domain/CharacterSelectionGrader.h \
     core/domain/Observer.h \
     core/domain/Subject.h \
+    core/domain/Unit.h \
+    core/domain/LearningStream.h \
     core/domain/Profile.h \
     core/domain/SkillProgress.h \
     core/domain/SRSScheduler.h \
@@ -46,7 +50,9 @@ SOURCES += \
     ui/MainWindow.cpp \
     ui/HomeView.cpp \
     ui/LessonView.cpp \
+    ui/PathView.cpp \
     ui/ProfileView.cpp \
+    ui/UnitCompleteDialog.cpp \
     ui/widgets/CharacterSelectionWidget.cpp \
     core/controllers/AppController.cpp \
     core/data/JsonContentRepository.cpp \
@@ -71,7 +77,9 @@ SOURCES += \
     core/domain/SkillProgress.cpp \
     core/domain/SRSScheduler.cpp \
     core/domain/StubSpeechEvaluator.cpp \
-    core/domain/Subject.cpp
+    core/domain/Subject.cpp \
+    core/domain/Unit.cpp \
+    core/domain/LearningStream.cpp
 
 # Copy content and assets to build output for local loading
 CONFIG(debug, debug|release) {

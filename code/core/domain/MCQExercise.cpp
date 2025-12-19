@@ -1,7 +1,7 @@
 #include "MCQExercise.h"
 
-MCQExercise::MCQExercise(const QString& id, const QString& prompt, const QStringList& choices, int correctIndex)
-    : Exercise(id, prompt), m_choices(choices), m_correctIndex(correctIndex) {}
+MCQExercise::MCQExercise(const QString& id, const QString& prompt, const QStringList& choices, int correctIndex, const QString& audioPath)
+    : Exercise(id, prompt), m_choices(choices), m_correctIndex(correctIndex), m_audioPath(audioPath) {}
 
 QString MCQExercise::type() const {
     return "MCQ";
@@ -16,6 +16,10 @@ QString MCQExercise::correctAnswer() const {
         return m_choices[m_correctIndex];
     }
     return {};
+}
+
+QString MCQExercise::audioPath() const {
+    return m_audioPath;
 }
 
 int MCQExercise::correctIndex() const {

@@ -1,12 +1,13 @@
 #pragma once
 
-#include <QVector>
 #include <QString>
+#include <vector>
 
 class Exercise;
+class LearningStream;
 
 class IContentRepository {
 public:
     virtual ~IContentRepository() = default;
-    virtual QVector<Exercise*> loadExercises(QString* error = nullptr) = 0;
+    virtual std::vector<LearningStream> loadStreams(QString* error = nullptr) = 0;
 };

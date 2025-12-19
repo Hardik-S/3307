@@ -34,6 +34,12 @@ bool SQLiteProfileRepository::ensureSchema(QString* error) const {
         }
         return false;
     }
+    if (!query.exec("CREATE TABLE IF NOT EXISTS unit_progress (stream TEXT, unit TEXT, PRIMARY KEY(stream, unit))")) {
+        if (error) {
+            *error = query.lastError().text();
+        }
+        return false;
+    }
     return true;
 }
 
@@ -66,6 +72,12 @@ Profile SQLiteProfileRepository::loadProfile(QString* error) {
         if (query.exec("SELECT skill, mastery, attempts FROM skill_progress")) {
             while (query.next()) {
                 profile.restoreSkill(query.value(0).toString(), query.value(1).toInt(), query.value(2).toInt());
+            }
+        }
+
+        if (query.exec("SELECT stream, unit FROM unit_progress")) {
+            while (query.next()) {
+                profile.markUnitCompleted(query.value(0).toString(), query.value(1).toString());
             }
         }
         db.close();
@@ -120,6 +132,28 @@ bool SQLiteProfileRepository::saveProfile(const Profile& profile, QString* error
                     break;
                 }
                 query.finish();
+            }
+        }
+
+        if (ok) {
+            query.exec("DELETE FROM unit_progress");
+            query.prepare("INSERT INTO unit_progress (stream, unit) VALUES (?, ?)");
+            for (auto it = profile.completedUnitMap().begin(); it != profile.completedUnitMap().end(); ++it) {
+                for (const auto& unitId : it.value()) {
+                    query.addBindValue(it.key());
+                    query.addBindValue(unitId);
+                    if (!query.exec()) {
+                        if (error) {
+                            *error = query.lastError().text();
+                        }
+                        ok = false;
+                        break;
+                    }
+                    query.finish();
+                }
+                if (!ok) {
+                    break;
+                }
             }
         }
 

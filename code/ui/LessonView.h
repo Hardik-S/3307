@@ -4,6 +4,7 @@
 
 class QLabel;
 class QListWidget;
+class QListWidgetItem;
 class QPushButton;
 class QLineEdit;
 
@@ -17,6 +18,7 @@ public:
     explicit LessonView(QWidget* parent = nullptr);
 
     void setExercise(const Exercise* exercise);
+    void setUnitProgress(int current, int total);
 
 signals:
     void answerSubmitted(const QString& answer);
@@ -30,6 +32,7 @@ private slots:
     void handleSubmit();
     void handleNext();
     void handleCharacterSelectionChanged(const QString& value);
+    void handleChoiceClicked(QListWidgetItem* item);
 
 private:
     void updateForExerciseType(const Exercise* exercise);
@@ -37,6 +40,7 @@ private:
 
     const Exercise* m_exercise;
     QLabel* m_promptLabel;
+    QLabel* m_progressLabel;
     QLabel* m_resultLabel;
     QListWidget* m_choiceList;
     QLabel* m_hintLabel;
