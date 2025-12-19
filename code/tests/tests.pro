@@ -1,15 +1,28 @@
 QT += core
-CONFIG += c++17 console testcase
+CONFIG += c++17 console testcase qt
 TEMPLATE = app
 TARGET = bhashaquest_tests
 
-INCLUDEPATH += ..
+GTEST_DIR = $$PWD/googletest
+
+INCLUDEPATH += .. \
+    ../core \
+    ../core/domain \
+    ../core/data \
+    $$GTEST_DIR/googletest \
+    $$GTEST_DIR/googlemock \
+    $$GTEST_DIR/googletest/include \
+    $$GTEST_DIR/googlemock/include
 
 SOURCES += \
     TestMain.cpp \
-    TestSRSScheduler.cpp \
     TestExerciseFactory.cpp \
-    TestTranslateGrader.cpp \
+    TestGraders.cpp \
+    TestSRSScheduler.cpp \
+    TestProfile.cpp \
+    TestContentRepository.cpp \
+    $$GTEST_DIR/googletest/src/gtest-all.cc \
+    $$GTEST_DIR/googlemock/src/gmock-all.cc \
     ../core/domain/Exercise.cpp \
     ../core/domain/MCQExercise.cpp \
     ../core/domain/TranslateExercise.cpp \
@@ -26,8 +39,11 @@ SOURCES += \
     ../core/domain/SkillProgress.cpp \
     ../core/domain/Profile.cpp \
     ../core/domain/SRSScheduler.cpp \
-    ../core/domain/StubSpeechEvaluator.cpp
-    ../core/domain/Subject.cpp
+    ../core/domain/StubSpeechEvaluator.cpp \
+    ../core/domain/Subject.cpp \
+    ../core/domain/Unit.cpp \
+    ../core/domain/LearningStream.cpp \
+    ../core/data/JsonContentRepository.cpp
 
 HEADERS += \
     ../core/domain/Exercise.h \
@@ -46,6 +62,8 @@ HEADERS += \
     ../core/domain/SkillProgress.h \
     ../core/domain/Profile.h \
     ../core/domain/SRSScheduler.h \
-    ../core/domain/StubSpeechEvaluator.h
-
-LIBS += -lgtest -lgtest_main -pthread
+    ../core/domain/StubSpeechEvaluator.h \
+    ../core/domain/Subject.h \
+    ../core/domain/Unit.h \
+    ../core/domain/LearningStream.h \
+    ../core/data/JsonContentRepository.h

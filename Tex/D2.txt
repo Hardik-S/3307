@@ -1,0 +1,726 @@
+\documentclass{article}
+\usepackage{listings}
+\usepackage{verbatim}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\date{}
+\usepackage{graphicx}
+\graphicspath{{.}{./images/}}
+
+
+\usepackage[margin=1in]{geometry}
+\lstset{language=C++, basicstyle=\small\ttfamily, breaklines=true, frame=single, backgroundcolor=\color{gray!10}}
+% === Add these to the PREAMBLE (after \documentclass{article}) ===
+\usepackage{xcolor}           % needed for \color{gray!10} in \lstset background
+\usepackage{microtype}        % nicer spacing & hyphenation
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdfauthor={Hardik Shrestha},
+  pdftitle={Bhasha Quest - Design Rationale Document},
+  pdfcreator={LaTeX},
+  pdfproducer={LaTeX},
+  pdfkeywords={Qt, C++, MVC, Design Patterns, Language Learning}
+}
+
+% Listings: centralize style and keep your background color
+\lstdefinestyle{bqcpp}{
+  language=C++,
+  basicstyle=\small\ttfamily,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{gray!10},
+  numbers=left,
+  numbersep=8pt,
+  numberstyle=\tiny,
+  tabsize=2,
+  showstringspaces=false,
+  columns=fullflexible
+}
+\lstset{style=bqcpp}
+
+% Table of contents depth (sections and subsections)
+\setcounter{tocdepth}{2}
+
+
+\title{Report - Design Rationale}
+\author{251163014 \\ Project: Bhasha Quest - Language Learning Application for Indic Scripts}
+
+\begin{document}
+
+\maketitle
+% === Add these right AFTER \maketitle ===
+\begin{center}
+\small CS3307A Deliverable 2
+\end{center}
+
+\vspace{0.5em}
+\tableofcontents
+\newpage
+
+\section{Architecture Overview}
+
+\subsection{System Structure}
+
+Bhasha Quest employs a layered MVC (Model-View-Controller) architecture using Qt 6 and C++17, with strict adherence to the separation of concerns principle. The application is organized into four distinct architectural layers:
+
+
+
+% Replace your verbatim block with this TikZ diagram:
+\begin{center}
+\begin{tikzpicture}[
+  font=\small,
+  layer/.style={draw, rounded corners, thick, fill=gray!5,
+                inner sep=4mm, minimum width=0.85\linewidth, align=left},
+  >=Stealth
+]
+% UI
+\node[layer] (ui) {\textbf{UI Layer (Qt Widgets)}\\
+-- HomeView, LessonView, ProfileView\\
+-- CharacterSelectionWidget (custom component)};
+% Controller
+\node[layer, below=10mm of ui] (ctrl) {\textbf{Controller Layer}\\
+-- AppController (orchestrates application logic)};
+% Domain
+\node[layer, below=10mm of ctrl] (dom) {\textbf{Domain Layer}\\
+-- Exercise hierarchy (MCQ, Translate, TileOrder)\\
+-- StrategyGrader family (Strategy Pattern)\\
+-- ExerciseFactory (Factory Pattern)\\
+-- AudioManager (Singleton Pattern)\\
+-- SRSScheduler, Profile, SkillProgress\\
+-- CharacterUtils (utility class)};
+% Data
+\node[layer, below=10mm of dom] (data) {\textbf{Data Layer}\\
+-- ContentRepository (JSON content loading)\\
+-- Profile persistence (JSON serialization)};
+
+% Connectors + labels
+\draw[->, thick] (ui) -- node[right]{\hspace{2mm}\textit{Qt Signals / Slots}} (ctrl);
+\draw[->, thick] (ctrl) -- node[right]{\hspace{2mm}\textit{Direct method calls}} (dom);
+\draw[->, thick] (dom) -- node[right]{\hspace{2mm}\textit{Repository interface}} (data);
+\end{tikzpicture}
+\end{center}
+
+
+\subsection{Architectural Principles}
+
+\subsubsection*{Strict Layer Separation}
+The architecture enforces a unidirectional dependency flow: 
+\[
+\text{UI} \rightarrow \text{Controller} \rightarrow \text{Domain} \rightarrow \text{Data}
+\]
+The domain layer has zero knowledge of the UI implementation, ensuring that business logic remains testable and reusable. 
+UI components communicate exclusively with \texttt{AppController} through Qt's signal/slot mechanism, never directly accessing domain objects.
+
+\subsubsection*{Qt Signal/Slot Mechanism for Loose Coupling}
+The UI layer connects to \texttt{AppController} using Qt's signal/slot system, enabling loose coupling between presentation and control logic. 
+When a user submits an answer, \texttt{LessonView} emits a signal that \texttt{AppController} receives through a slot, processes via domain logic, 
+and emits result signals back to the UI. 
+This decoupling allows UI modifications without touching controller code, and vice versa.
+
+\subsubsection*{Controller as Orchestrator}
+\texttt{AppController} serves as the central orchestrator, managing lesson flow, exercise progression, and user profile updates. 
+It delegates business logic to domain classes (e.g., \texttt{StrategyGrader} for evaluation, \texttt{SRSScheduler} for review intervals) 
+while maintaining session state. 
+This separation ensures that complex workflows remain comprehensible and domain objects stay focused on single responsibilities.
+
+\subsubsection*{Repository Pattern for Data Abstraction}
+\texttt{ContentRepository} provides a clean abstraction over data storage, currently implemented with JSON file loading. 
+The repository interface shields the domain layer from data source details, allowing future migration to SQLite or cloud storage 
+without modifying domain classes. 
+Profile serialization follows the same principle, using JSON as the persistence mechanism with clear boundaries between business objects 
+and their serialized representations.
+
+
+\subsection{Key Architectural Benefits}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item \textbf{Testability:} Domain logic can be unit-tested in isolation without Qt dependencies.
+  \item \textbf{Maintainability:} Changes to the UI design do not ripple into business logic, ensuring stability across layers.
+  \item \textbf{Extensibility:} New exercise types can be added by extending the \texttt{Exercise} base class and creating corresponding grader implementations.
+  \item \textbf{Scalability:} Well-defined layer boundaries enable parallel development across independent components, improving team efficiency.
+\end{enumerate}
+
+\newpage
+
+\section{Design Patterns}
+
+\subsection{Factory Pattern: \texttt{ExerciseFactory}}
+
+\textbf{Pattern Type:} Creational \\
+\textbf{Implementation Location:} \texttt{src/core/domain/ExerciseFactory.h/cpp}
+
+\subsubsection*{Why This Pattern Was Chosen}
+The application supports multiple exercise types (\texttt{MCQExercise}, \texttt{TranslateExercise}, \texttt{TileOrderExercise}) 
+that share a common interface but have different creation requirements. 
+Without the Factory Pattern, the \texttt{ContentRepository} would need complex conditional logic to instantiate exercises 
+based on type strings from JSON data. 
+This would violate the Open/Closed Principle and create tight coupling between data loading and exercise instantiation.
+
+\subsubsection*{How It Was Implemented}
+\begin{lstlisting}[language=C++, caption={ExerciseFactory Implementation}, captionpos=b]
+class ExerciseFactory {
+public:
+    static Exercise* createExercise(const QString& type, const QJsonObject& spec);
+    
+private:
+    static Exercise* createMCQ(const QJsonObject& spec);
+    static Exercise* createTranslate(const QJsonObject& spec);
+    static Exercise* createTileOrder(const QJsonObject& spec);
+};
+\end{lstlisting}
+
+The factory provides a single static \texttt{createExercise()} method that accepts an exercise type string 
+(\texttt{"MCQ"}, \texttt{"Translate"}, \texttt{"TileOrder"}) and a JSON specification. 
+It delegates to private helper methods for type-specific construction, encapsulating the details of how each exercise type 
+is initialized from JSON data.
+
+\subsubsection*{Usage Example}
+\begin{lstlisting}[language=C++, caption={ExerciseFactory Usage in ContentRepository}, captionpos=b]
+// In ContentRepository::loadExercises()
+QString exerciseType = jsonObj["type"].toString();
+QJsonObject spec = jsonObj["spec"].toObject();
+Exercise* exercise = ExerciseFactory::createExercise(exerciseType, spec);
+exerciseQueue.append(exercise);
+\end{lstlisting}
+
+\subsubsection*{Benefits Gained}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item \textbf{Encapsulation:} Object creation logic is centralized in one class rather than scattered across the codebase.
+  \item \textbf{Extensibility:} Adding a new exercise type (e.g., \texttt{ListenExercise}) requires only modifying \texttt{ExerciseFactory}, not \texttt{ContentRepository} or \texttt{AppController}.
+  \item \textbf{Maintainability:} Changes to exercise construction parameters are localized to factory methods.
+  \item \textbf{Testability:} The factory can be tested independently with mock JSON specifications.
+\end{enumerate}
+
+\subsection{Strategy Pattern: \texttt{StrategyGrader} Hierarchy}
+
+\textbf{Pattern Type:} Behavioral \\
+\textbf{Implementation Location:} 
+\texttt{src/core/domain/StrategyGrader.h}, 
+\texttt{MCQGrader.cpp}, 
+\texttt{TranslateGrader.cpp}, 
+\texttt{TileOrderGrader.cpp}, 
+\texttt{CharacterSelectionGrader.cpp}
+
+\subsubsection*{Why This Pattern Was Chosen}
+Different exercise types require fundamentally different grading algorithms:
+\begin{itemize}
+  \item \textbf{MCQExercise:} Simple index matching (user-selected option vs. correct index)
+  \item \textbf{TranslateExercise:} Fuzzy string matching with multiple acceptable answers
+  \item \textbf{TileOrderExercise:} Sequence order verification
+  \item \textbf{Character Selection Mode:} Character-by-character sequence matching
+\end{itemize}
+
+Embedding grading logic directly within \texttt{Exercise} classes would violate the Single Responsibility Principle 
+and complicate testing. The Strategy Pattern enables grading algorithms to be selected and swapped at runtime 
+based on the exercise type, maintaining clean separation between behavior and data.
+
+\subsubsection*{How It Was Implemented}
+\begin{lstlisting}[language=C++, caption={StrategyGrader Interface and Concrete Implementations}, captionpos=b]
+// Abstract strategy interface
+class StrategyGrader {
+public:
+    virtual ~StrategyGrader() = default;
+    virtual Result grade(const QString& userAnswer, const Exercise* exercise) = 0;
+};
+
+// Concrete strategies
+class MCQGrader : public StrategyGrader {
+    Result grade(const QString& userAnswer, const Exercise* exercise) override;
+};
+
+class TranslateGrader : public StrategyGrader {
+    Result grade(const QString& userAnswer, const Exercise* exercise) override;
+};
+\end{lstlisting}
+
+The \texttt{AppController} dynamically selects the appropriate grader at runtime:
+
+\begin{lstlisting}[language=C++, caption={Dynamic Strategy Selection in AppController}, captionpos=b]
+StrategyGrader* AppController::createGraderForExercise(Exercise* exercise) {
+    if (dynamic_cast<MCQExercise*>(exercise)) {
+        return new MCQGrader();
+    } else if (dynamic_cast<TranslateExercise*>(exercise)) {
+        if (exercise->usesCharacterSelection()) {
+            return new CharacterSelectionGrader();
+        }
+        return new TranslateGrader();
+    } else if (dynamic_cast<TileOrderExercise*>(exercise)) {
+        return new TileOrderGrader();
+    }
+    return nullptr;
+}
+\end{lstlisting}
+
+\subsubsection*{Benefits Gained}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item \textbf{Flexibility:} Grading algorithms can be modified or replaced without altering \texttt{Exercise} or \texttt{AppController}.
+  \item \textbf{Extensibility:} New grading strategies can be added by implementing the \texttt{StrategyGrader} interface.
+  \item \textbf{Testability:} Each grading algorithm can be unit-tested independently with mock \texttt{Exercise} objects.
+  \item \textbf{Runtime Selection:} The appropriate strategy is chosen dynamically based on exercise characteristics.
+\end{enumerate}
+
+\subsection{Singleton Pattern: \texttt{AudioManager}}
+
+\textbf{Pattern Type:} Creational \\
+\textbf{Implementation Location:} \texttt{src/core/domain/AudioManager.h/cpp}
+
+\subsubsection*{Why This Pattern Was Chosen}
+Audio playback relies on resource-intensive Qt components such as \texttt{QMediaPlayer} and \texttt{QAudioOutput}, 
+which should be initialized once and reused throughout the application's lifecycle. 
+Multiple instances of \texttt{AudioManager} would lead to:
+\begin{itemize}
+  \item \textbf{Resource conflicts:} Multiple players competing for the same audio device.
+  \item \textbf{Memory waste:} Duplicate initialization of audio backends.
+  \item \textbf{Inconsistent state:} Simultaneous or overlapping playback from multiple players.
+\end{itemize}
+
+The Singleton Pattern ensures a single shared instance manages all audio operations across the system.
+
+\subsubsection*{How It Was Implemented}
+\begin{lstlisting}[language=C++, caption={AudioManager Singleton Implementation}, captionpos=b]
+class AudioManager {
+public:
+    static AudioManager& getInstance();
+    
+    // Delete copy/move constructors and assignment operators
+    AudioManager(const AudioManager&) = delete;
+    AudioManager& operator=(const AudioManager&) = delete;
+    
+    void playSuccess();
+    void playError();
+    void playAudio(const QString& filename);
+    
+private:
+    AudioManager();   // Private constructor
+    ~AudioManager();
+    
+    static AudioManager* instance;
+    QMediaPlayer* player;
+    QAudioOutput* audioOutput;
+};
+\end{lstlisting}
+
+The class exposes a single static access point through \texttt{getInstance()}, returning the unique global instance. 
+Its constructor and destructor are private to prevent external instantiation or deletion, and 
+copy/move constructors are deleted to preserve uniqueness.
+
+\subsubsection*{Usage Example}
+\begin{lstlisting}[language=C++, caption={Using the Singleton in AppController}, captionpos=b]
+// In AppController::submitAnswer()
+if (result.correct) {
+    AudioManager::getInstance().playSuccess();
+} else {
+    AudioManager::getInstance().playError();
+}
+\end{lstlisting}
+
+\subsubsection*{Benefits Gained}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item \textbf{Resource Management:} A single \texttt{QMediaPlayer} instance is reused for all audio operations, avoiding duplication.
+  \item \textbf{Global Access Point:} Any component can access audio playback via \texttt{getInstance()}.
+  \item \textbf{Lazy Initialization:} The \texttt{AudioManager} is created only upon first access.
+  \item \textbf{Thread Safety:} Ensures consistent initialization without race conditions (the current implementation is single-threaded).
+\end{enumerate}
+
+\section{Updated Architecture \& Flow Diagrams}
+\label{sec:updated-diagrams}
+
+This section presents the updated, implementation-accurate diagrams for \textit{Bhasha Quest}. The class diagram (Figure~\ref{fig:class-diagram-upd}) captures the layered MVC architecture with explicit pattern placements; the sequence diagram (Figure~\ref{fig:sequence-diagram-upd}) details the end-to-end orchestration for a \emph{Complete Exercise} interaction.
+
+\subsection{Class Diagram: Layers, Responsibilities, and Patterns}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{class_diagram_updated.png}
+  \caption{Updated class diagram: strict layer boundaries (UI \textrightarrow{} Controller \textrightarrow{} Domain \textrightarrow{} Data), plus the concrete locations of \textbf{Factory} (\texttt{ExerciseFactory}), \textbf{Strategy} (\texttt{StrategyGrader} hierarchy), and \textbf{Singleton} (\texttt{AudioManager}). D2 additions highlighted include \texttt{CharacterSelectionWidget}, \texttt{CharacterSelectionGrader}, and \texttt{CharacterUtils}.}
+  \label{fig:class-diagram-upd}
+\end{figure}
+
+\paragraph{Integration notes.}
+\begin{itemize}[leftmargin=1.25em]
+  \item \textbf{UI Layer (Qt Widgets).} \texttt{HomeView}, \texttt{LessonView}, and \texttt{ProfileView} remain thin presenters. The new \texttt{CharacterSelectionWidget} is an isolated component that surfaces selection events via signals, preserving separation of concerns.
+  \item \textbf{Controller as Orchestrator.} \texttt{AppController} owns lesson flow and delegates grading, profile updates, and SRS scheduling. It never reaches into widget internals; all communication uses signals/slots or typed method calls into the domain.
+  \item \textbf{Domain: Patterns in Place.}
+        \begin{enumerate}[label=\arabic*), leftmargin=1.5em]
+          \item \textbf{Factory} (\texttt{ExerciseFactory}) converts JSON specs into concrete \texttt{Exercise} instances (\texttt{MCQ}, \texttt{Translate}, \texttt{TileOrder}, and D2’s character-selection path).
+          \item \textbf{Strategy} (\texttt{StrategyGrader} family) supports pluggable grading (\texttt{MCQGrader}, \texttt{TranslateGrader}, \texttt{TileOrderGrader}, \texttt{CharacterSelectionGrader}) with runtime selection in the controller—satisfying Open/Closed.
+          \item \textbf{Singleton} (\texttt{AudioManager}) centralizes \texttt{QMediaPlayer}/\texttt{QAudioOutput} to avoid duplication and device contention.
+        \end{enumerate}
+  \item \textbf{Data Layer.} \texttt{ContentRepository} loads content and profile data from JSON with a clean repository boundary, enabling a future SQLite backend without touching domain objects.
+\end{itemize}
+
+\subsection{Sequence Diagram: “Complete Exercise” Orchestration}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{sequence_diagram_updated.png}
+  \caption{Updated sequence for \emph{Complete Exercise}. The UI emits signals (\texttt{answerSubmitted}, \texttt{characterSelected}), the controller executes core logic (\texttt{getCorrectAnswer}, \texttt{compareAnswers}, \texttt{calculateNextReview}) and updates state (\texttt{updateSkillProgress}, \texttt{setNextReviewTime}). Results propagate back to the UI via signals (feedback toast, animations) while audio cues are handled by \texttt{AudioManager}.}
+  \label{fig:sequence-diagram-upd}
+\end{figure}
+
+\paragraph{Flow highlights.}
+\begin{enumerate}[label=\textbf{\Alph*.}, leftmargin=1.6em]
+  \item \textbf{Submission Path.} \texttt{LessonView} (or \texttt{CharacterSelectionWidget}) emits the submission signal. \texttt{AppController} selects a \texttt{StrategyGrader} based on the concrete \texttt{Exercise} and computes a \texttt{Result}.
+  \item \textbf{State Updates.} On result, the controller updates \texttt{Profile} and \texttt{SkillProgress}, then invokes \texttt{SRSScheduler} to compute the next review time. These remain UI-agnostic.
+  \item \textbf{Feedback and UX.} The controller triggers UI updates via signals (correct/incorrect, progress, next exercise prompt). \texttt{AudioManager} plays success/error sounds without leaking multimedia concerns into the controller or UI widgets.
+  \item \textbf{Readiness for D3.} The same orchestration point cleanly admits new modalities: \texttt{ListenExercise} and \texttt{SpeakExercise} can plug in via factory + strategy without altering the sequence skeleton.
+\end{enumerate}
+
+\paragraph{Why these updates matter.}
+The diagrams now mirror the codebase precisely: pattern placements are explicit, signal/slot boundaries are visible, and D2 enhancements (\texttt{CharacterSelectionWidget}, grader, and utilities) appear where they are implemented. This makes the architecture auditable, test planning straightforward, and D3 extensions low-risk.
+
+\newpage
+\section{Implementation Challenges}
+
+\subsection{Challenge 1: Qt 6 Installation and Learning Curve}
+
+\textbf{Problem:}  
+As a developer new to Qt, I faced a steep learning curve understanding Qt's build system, signal/slot mechanism, and widget hierarchy. 
+The initial setup required downloading Qt 6.10 (3+ GB), configuring Qt Creator, and resolving path dependencies.
+
+\textbf{Resolution:}  
+I approached this systematically by:
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Following Qt's official “Getting Started” documentation for basic project structure.
+  \item Creating a minimal “Hello World” Qt Widgets application to verify installation.
+  \item Incrementally adding complexity (signals/slots, layouts, custom widgets).
+  \item Using Qt Creator’s integrated documentation (\texttt{F1}) to understand class APIs.
+  \item Studying the Qt Widgets Gallery example for UI best practices.
+\end{enumerate}
+
+\textbf{Lessons Learned:}  
+Qt’s Meta-Object Compiler (MOC) requires the \texttt{Q\_OBJECT} macro for signal/slot functionality. 
+Omitting this macro caused cryptic linker errors. 
+I learned to always include \texttt{Q\_OBJECT} in classes that define signals or slots.
+
+\subsection{Challenge 2: qmake vs. CMake Build System Confusion}
+
+\textbf{Problem:}  
+The project specification mentioned Qt Creator but didn’t clarify whether to use qmake (\texttt{.pro}) or CMake (\texttt{CMakeLists.txt}). 
+Initially, I created both build files, which caused conflicts as Qt Creator could not determine which system to use—resulting in build errors and missing dependencies.
+
+\textbf{Resolution:}  
+After researching Qt’s build systems, I standardized on \texttt{qmake} because:
+\begin{itemize}
+  \item \texttt{qmake} is Qt’s native build system with simpler syntax for Qt-specific features.
+  \item \texttt{.pro} files are more concise for Qt-heavy projects using modules like Widgets and Multimedia.
+  \item Qt Creator integrates seamlessly with \texttt{qmake} projects.
+\end{itemize}
+
+I removed \texttt{CMakeLists.txt} and maintained only \texttt{BhashaQuestV3.pro}, ensuring all source files, headers, and forms were properly listed.
+
+\textbf{Lessons Learned:}  
+Build systems must be mutually exclusive. Supporting both \texttt{qmake} and \texttt{CMake} simultaneously causes conflicts. 
+For Qt-centric projects, \texttt{qmake} reduces boilerplate, while \texttt{CMake} is better suited for cross-platform projects with non-Qt dependencies.
+
+\subsection{Challenge 3: Indic Script Input Solution – CharacterSelectionWidget Innovation}
+
+\textbf{Problem:}  
+The original design assumed users would type Devanagari or Kannada characters using system keyboard input methods. 
+However, this introduced usability issues:
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Users may not have Indic keyboard layouts installed.
+  \item Learning a new input method adds friction to the language-learning experience.
+  \item Testing on the TA’s machine could fail if required fonts or IMEs were missing.
+\end{enumerate}
+
+\textbf{Resolution:}  
+I developed a custom \texttt{CharacterSelectionWidget} UI component that displays a character bank as clickable buttons. 
+Users construct answers by tapping characters in sequence instead of typing. This innovation:
+\begin{itemize}
+  \item Eliminates dependency on system input methods.
+  \item Provides a Duolingo-like tactile experience.
+  \item Guarantees Indic script rendering (generated directly from exercise data).
+  \item Simplifies testing (no keyboard configuration required).
+\end{itemize}
+
+\textbf{Supporting Classes:}
+\begin{itemize}
+  \item \texttt{CharacterUtils:} Generates character banks by extracting unique characters and adding random distractors.
+  \item \texttt{CharacterSelectionGrader:} Implements character-by-character sequence grading.
+\end{itemize}
+
+\textbf{Lessons Learned:}  
+Sometimes the best solution is to bypass system-level complexity entirely. 
+Instead of relying on platform input methods, a custom UI component offered better UX and eliminated deployment issues.
+
+\subsection{Challenge 4: Qt Signal/Slot Wiring Complexity}
+
+\textbf{Problem:}  
+The application required numerous signal/slot connections between UI components and \texttt{AppController}. 
+Initially, each signal was manually connected in constructors using \texttt{connect()}, resulting in verbose and error-prone code with over twenty connections in \texttt{LessonView} alone.
+
+\textbf{Resolution:}  
+I adopted a systematic naming convention to clarify intent and improve traceability:
+\begin{itemize}
+  \item \texttt{Signal:} \texttt{answerSubmitted(QString)} → \texttt{Slot: onAnswerSubmitted(QString)}
+  \item \texttt{Signal:} \texttt{lessonCompleted(int, int)} → \texttt{Slot: onLessonCompleted(int, int)}
+\end{itemize}
+
+Connections were grouped logically (lesson lifecycle, answer submission, progress updates), each with comments describing data flow. 
+Qt Creator’s “Go to Slot” feature auto-generated slot declarations, reducing boilerplate and human error.
+
+\textbf{Lessons Learned:}  
+Clear naming conventions and grouped signal/slot connections drastically improve maintainability. 
+Organizing related connections together simplifies debugging and event flow tracing.
+
+\section{Changes from Deliverable 1}
+
+\subsection{Addition 1: \texttt{CharacterSelectionWidget} (Beyond Requirements)}
+
+\textbf{Motivation:}  
+The original proposal planned for a simple text input field for translation exercises. 
+During implementation, I realized this approach would introduce usability and deployment issues for Indic scripts.
+
+\textbf{Implementation:}  
+A custom Qt widget was developed to display a shuffled character bank as clickable buttons. 
+Users tap characters in sequence to construct their answer. This design provides:
+\begin{itemize}
+  \item Visual feedback (selected characters are highlighted)
+  \item Undo and clear operations
+  \item Guaranteed Indic script rendering
+  \item A Duolingo-like, intuitive user experience
+\end{itemize}
+
+\textbf{Impact:}  
+This feature enhances the application beyond the base requirements, demonstrating proactive problem-solving and a user-centered design approach.
+
+\subsection{Addition 2: \texttt{CharacterUtils} Helper Class}
+
+\textbf{Motivation:}  
+Generating character banks required non-trivial string processing, such as:
+\begin{itemize}
+  \item Extracting unique Unicode characters from answers
+  \item Shuffling characters randomly
+  \item Adding distractor characters from language-specific sets
+\end{itemize}
+
+\textbf{Implementation:}  
+A static utility class, \texttt{CharacterUtils}, was created with methods for:
+\begin{itemize}
+  \item \texttt{extractUniqueCharacters(QString)} – Parses Unicode strings into distinct characters.
+  \item \texttt{generateCharacterBank(QString, QStringList)} – Creates shuffled character banks (\texttt{n+3} size).
+  \item \texttt{getRandomDistractors(QString, QStringList, int)} – Selects random characters not present in the correct answer.
+\end{itemize}
+
+\textbf{Impact:}  
+Encapsulates character-processing logic into a reusable and testable class. 
+This design adheres to the Single Responsibility Principle and keeps \texttt{TranslateExercise} focused on core semantics rather than string manipulation.
+
+\subsection{Addition 3: Enhanced UI with Animations and Modern Styling}
+
+\textbf{Motivation:}  
+The initial prototype used plain, unstyled Qt widgets. 
+To create a more engaging learning experience, I enhanced the interface with:
+\begin{itemize}
+  \item \texttt{QPropertyAnimation} for smooth transitions (fade effects, slide-ins)
+  \item Custom Qt Stylesheets for modern button and label aesthetics
+  \item \texttt{QGraphicsEffect} for subtle shadows and visual polish
+\end{itemize}
+
+\newpage 
+\textbf{Implementation:}  
+Custom stylesheets were applied to elevate widget design:
+\begin{lstlisting}[language=C++, caption={Custom Button Styling Using Qt Stylesheets}, captionpos=b]
+submitButton->setStyleSheet(
+    "QPushButton {"
+    "  background-color: #4CAF50;"
+    "  color: white;"
+    "  border-radius: 8px;"
+    "  padding: 12px 24px;"
+    "  font-size: 16px;"
+    "}"
+    "QPushButton:hover {"
+    "  background-color: #45a049;"
+    "}"
+);
+\end{lstlisting}
+
+Animations were used for visual feedback:
+\begin{lstlisting}[language=C++, caption={Feedback Animation with QPropertyAnimation}, captionpos=b]
+QPropertyAnimation* fadeOut = new QPropertyAnimation(feedbackLabel, "opacity");
+fadeOut->setDuration(500);
+fadeOut->setStartValue(1.0);
+fadeOut->setEndValue(0.0);
+fadeOut->start();
+\end{lstlisting}
+
+\textbf{Impact:}  
+This creates a polished, modern user experience that rivals commercial learning apps. 
+It demonstrates mastery of Qt’s graphics and animation frameworks beyond basic widget usage.
+
+\subsection{Addition 4: Time Travel Dev Tools for Testing}
+
+\textbf{Motivation:}  
+Testing spaced repetition logic in \texttt{SRSScheduler} was difficult because real review intervals span days or weeks. 
+Manual testing was impractical during active development.
+
+\textbf{Implementation:}  
+Debug-only functions were added to simulate time passage:
+\begin{lstlisting}[language=C++, caption={Debug Function for Simulating Time Progression}, captionpos=b]
+#ifdef QT_DEBUG
+void SRSScheduler::advanceTimeTo(const QDateTime& futureTime) {
+    simulatedCurrentTime = futureTime;
+}
+#endif
+\end{lstlisting}
+
+This allowed testing scenarios such as “What happens if a user returns after 3 days?” without waiting for real time.
+
+\textbf{Impact:}  
+Dramatically accelerates testing and validation of the SRS algorithm. 
+These functions are conditionally compiled in debug builds, ensuring no impact on production releases.
+
+\newpage
+\section{Next Steps for Deliverable 3}
+
+\subsection{Feature 1: \texttt{ListenExercise} with Audio Playback}
+
+\textbf{Description:}  
+Introduce a new exercise type in which users listen to a spoken word or phrase and select the correct translation from multiple choices.
+
+\textbf{Technical Approach:}
+\begin{itemize}
+  \item Implement a \texttt{ListenExercise} class extending the \texttt{Exercise} base.
+  \item Integrate with \texttt{AudioManager} to handle audio playback on demand.
+  \item Create a \texttt{ListenGrader} strategy to evaluate user selections.
+  \item Extend \texttt{ExerciseFactory} to recognize and instantiate the \texttt{"Listen"} type.
+  \item Enhance \texttt{LessonView} with UI controls (play and repeat buttons).
+\end{itemize}
+
+\textbf{Estimated Complexity:} \textit{Moderate} — leverages existing \texttt{AudioManager} singleton for playback.
+
+\vspace{0.5em}
+
+\subsection{Feature 2: \texttt{SpeakExercise} with Recording and Stub ASR}
+
+\textbf{Description:}  
+Develop a speaking exercise that records user pronunciation and provides mock feedback.  
+A stub Automatic Speech Recognition (ASR) evaluator will be used to simulate results during development.
+
+\textbf{Technical Approach:}
+\begin{itemize}
+  \item Create \texttt{SpeakExercise} class extending \texttt{Exercise}.
+  \item Implement \texttt{SpeakGrader} with a \texttt{StubSpeechEvaluator} interface.
+  \item Stub implementation returns randomized scores for development testing.
+  \item Design interface for future integration with real ASR (e.g., Google Cloud Speech, Whisper).
+  \item Add microphone and waveform visualization UI elements.
+  \item Use \texttt{QAudioRecorder} for audio capture via Qt Multimedia.
+\end{itemize}
+
+\textbf{Estimated Complexity:} \textit{High} — audio capture and analysis introduce greater technical complexity than playback.
+
+\vspace{0.5em}
+
+\subsection{Feature 3: Observer Pattern for Real-Time Updates}
+
+\textbf{Description:}  
+Apply the Observer Pattern to enable live UI updates when profile or progress data changes, removing the need for manual refresh calls.
+
+\textbf{Technical Approach:}
+\begin{itemize}
+  \item Define an \texttt{Observable} interface for \texttt{Profile} and \texttt{SkillProgress}.
+  \item Implement \texttt{Observer} interface for UI components.
+  \item Trigger notifications on XP, streak, or mastery updates.
+  \item Update dependent UI elements automatically in response.
+\end{itemize}
+
+\textbf{Estimated Complexity:} \textit{Low} — Qt’s signal/slot model already provides observer-like behavior; this change formalizes it for clarity and extensibility.
+
+\vspace{0.5em}
+
+\subsection{Feature 4: GoogleTest / GMock Unit Tests}
+
+\textbf{Description:}  
+Integrate GoogleTest and Google Mock to achieve robust unit test coverage for all core domain components.
+
+\textbf{Test Coverage Plan:}
+\begin{itemize}
+  \item \texttt{SRSScheduler} — Verify review interval calculations and due date logic.
+  \item \texttt{ExerciseFactory} — Confirm correct creation of exercise types from JSON specs.
+  \item \texttt{StrategyGrader} implementations — Validate all grading algorithms, including edge cases.
+  \item \texttt{Profile} — Test XP accumulation, streak computation, and serialization.
+  \item \texttt{ContentRepository} — Mock file I/O and test JSON parsing error handling.
+\end{itemize}
+
+\textbf{Example Test Structure:}
+\begin{lstlisting}[language=C++, caption={Sample Unit Tests Using GoogleTest}, captionpos=b]
+TEST(SRSSchedulerTest, CalculatesNextReviewInterval) {
+    SRSScheduler scheduler;
+    QDateTime startTime = QDateTime::currentDateTime();
+    
+    // First review after 1 day for "Easy"
+    QDateTime nextReview = scheduler.getNextReview(startTime, Difficulty::Easy);
+    EXPECT_EQ(nextReview, startTime.addDays(1));
+}
+
+TEST(ExerciseFactoryTest, CreatesMCQFromValidSpec) {
+    QJsonObject spec = createMockMCQSpec();
+    Exercise* ex = ExerciseFactory::createExercise("MCQ", spec);
+    
+    ASSERT_NE(ex, nullptr);
+    EXPECT_EQ(ex->getType(), "MCQ");
+    delete ex;
+}
+\end{lstlisting}
+
+\textbf{Estimated Complexity:} \textit{Moderate} — requires GoogleTest configuration in \texttt{qmake}, but test authoring remains straightforward.
+
+\vspace{0.5em}
+
+\subsection{Feature 5: SQLite Persistence Option}
+
+\textbf{Description:}  
+Introduce SQLite as an alternative data persistence backend to replace or complement JSON serialization for improved query performance and data integrity.
+
+\textbf{Technical Approach:}
+\begin{itemize}
+  \item Utilize Qt SQL module (\texttt{QSqlDatabase}, \texttt{QSqlQuery}) for database management.
+  \item Define a \texttt{ProfileRepository} interface with two implementations:
+    \begin{itemize}
+      \item \texttt{JSONProfileRepository} — current JSON-based storage.
+      \item \texttt{SQLiteProfileRepository} — new SQL-backed version.
+    \end{itemize}
+  \item Allow backend selection via configuration using the Repository Pattern.
+  \item Design normalized schemas for \texttt{profiles} and \texttt{skill\_progress} tables.
+\end{itemize}
+
+\textbf{Estimated Complexity:} \textit{Moderate} — schema design and query optimization require careful consideration.
+
+\section{Reflection}
+
+Working on this project showed me how much of software design is about making practical decisions early and sticking to good structure.  
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item \textbf{Design Patterns in Practice:}  
+  Patterns like Factory, Strategy, and Singleton ended up solving real issues, not just organizing code for the sake of it. 
+  I stopped thinking of them as theory and started seeing them as tools that make future work easier.
+
+  \item \textbf{Architecture from the Start Matters:}  
+  Because the system already had a clear separation between UI, controller, domain, and data, adding new components like \texttt{CharacterSelectionWidget} didn’t break anything. 
+  It made me realize how much technical debt you can avoid just by planning the structure properly on day one.
+
+  \item \textbf{User Experience Comes First:}  
+  The idea for the \texttt{CharacterSelectionWidget} came from real user problems—no keyboard layouts, missing fonts, and setup friction. 
+  Good architecture only matters if people can actually use what you build.
+
+  \item \textbf{Testing Sooner Would Have Helped:}  
+  I started with avoiding tests as they were not required. Then, I defaulted to TDD when I wasn't making enough progress. I wrote tests late for things like \texttt{SRSScheduler} and \texttt{StrategyGrader}, which made debugging harder than it needed to be. 
+  Starting with tests next time will help catch edge cases before they become design problems.
+
+  \item \textbf{Documentation Saves Time:}  
+  Qt’s documentation can feel overwhelming at first, but taking the time to read it carefully saved me hours of guessing later. 
+  Knowing how the framework expects you to work makes a big difference when you’re building something this large.
+\end{enumerate}
+
+Overall, the project feels stable and ready for expansion.  
+The design patterns and layer separation make new features—like speaking and listening exercises, observers, and test automation—easy to integrate without rewriting existing code.  
+Deliverable~3 will be about building on this foundation, not fixing what’s already there.
+
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\begin{center}
+\textit{End of Document}
+\end{center}
+
+\end{document}
