@@ -1,0 +1,372 @@
+\documentclass{article}
+\usepackage{listings}
+\usepackage{verbatim}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\date{}
+\usepackage{graphicx}
+\graphicspath{{.}{./}}
+\usepackage[margin=1in]{geometry}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdfauthor={Hardik Shrestha},
+  pdftitle={Bhasha Quest - Final Design Rationale (Deliverable 3)},
+  pdfcreator={LaTeX},
+  pdfproducer={LaTeX},
+  pdfkeywords={Qt, C++, MVC, Design Patterns, Language Learning}
+}
+
+\lstdefinestyle{bqcpp}{
+  language=C++,
+  basicstyle=\small\ttfamily,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{gray!10},
+  numbers=left,
+  numbersep=8pt,
+  numberstyle=\tiny,
+  tabsize=2,
+  showstringspaces=false,
+  columns=fullflexible
+}
+\lstset{style=bqcpp}
+\setcounter{tocdepth}{2}
+
+\title{Report - Design Rationale (Deliverable 3)}
+\author{Hardik Shrestha \\ Project: Bhasha Quest - Dual-Stream Language Learning (Nepali \& Kannada)}
+
+\begin{document}
+\maketitle
+\begin{center}
+\small CS3307A Deliverable 3
+\end{center}
+\vspace{0.5em}
+\tableofcontents
+\newpage
+
+\section{Architecture Overview (Updated)}
+\subsection{System Structure}
+Bhasha Quest uses layered MVC with strict separation of UI, controller, domain, and data. The final design adds dual streams (Nepali, Kannada) and unit-based progression (3 exercises per unit) surfaced in a Path tab. A dedicated Path view surfaces status and locking; the controller orchestrates grading, progression, and persistence via repositories.
+
+\subsection{Key Architectural Principles}
+\begin{itemize}
+  \item \textbf{Strict Layering:} UI $\rightarrow$ Controller $\rightarrow$ Domain $\rightarrow$ Data; domain has no UI knowledge.
+  \item \textbf{Streams \& Units:} Content organized into streams with units of 3 exercises; Path tab shows completed/current/locked units with admin override.
+  \item \textbf{Controller as Orchestrator:} \texttt{AppController} holds stream/unit context, picks graders at runtime, updates profile/XP/streak, persists via repositories, emits unit completion.
+  \item \textbf{Signals/Slots for Decoupling:} UI emits actions; controller emits state/results/errors; keeps dependencies one-way.
+  \item \textbf{Repository Abstraction:} JSON repositories for content and profile; SQLite profile repo behind the same interface for future backend swap.
+  \item \textbf{Error Handling:} Controller surfaces repo/audio issues via signals; Path respects locks unless admin override (admin123).
+\end{itemize}
+
+\subsection{Requirements Coverage}
+\begin{itemize}
+  \item \textbf{Dual Languages:} Two parallel learning streams (Nepali, Kannada) with independent units and content.
+  \item \textbf{Structured Units:} Each unit holds exactly 3 exercises; Path tab visualizes progress and locking.
+  \item \textbf{Exercise Variety:} MCQ, Translate (text/character selection), TileOrder, Listen (audio MCQ), Speak (stub evaluator); audio integrated.
+  \item \textbf{Progress Tracking:} XP, streak, skill mastery, per-stream unit completion persisted; UI shows date and streak controls.
+  \item \textbf{Patterns Implemented:} Factory + Singleton (creational), Strategy + Observer (behavioral), all in active use.
+  \item \textbf{Testing:} GoogleTest/GoogleMock harness; core logic tests included and passing.
+\end{itemize}
+
+\subsection{Notable Implementation Details}
+\begin{itemize}
+  \item \textbf{Path Locking \& Admin Override:} Units unlock sequentially; admin password can bypass locks for demos/testing.
+  \item \textbf{Unit Completion Dialog:} Confetti animation + “Keep Learning” action wired to controller continuation.
+  \item \textbf{Character Picker:} Per-language character sets flow from content JSON to the widget, which rebuilds its grid dynamically.
+  \item \textbf{Audio Resolution:} AudioManager resolves relative paths under \texttt{assets/}; missing files are safely ignored.
+  \item \textbf{Persistence Shape:} Profile JSON stores completed units; SQLite schema includes unit progress table for future DB promotion.
+\end{itemize}
+
+\section{Modules and Responsibilities}
+\subsection{UI Layer}
+\begin{itemize}
+  \item \textbf{HomeView:} Stream cards, profile shortcut.
+  \item \textbf{LessonView:} Prompts, MCQ list (click-to-fill), character picker, audio play, unit progress label, feedback.
+  \item \textbf{PathView:} Unit list per stream with status; prompts for admin password on locked units.
+  \item \textbf{ProfileView:} Learner Hardik, XP, streak, skills; +1 day button for streak testing.
+  \item \textbf{UnitCompleteDialog:} Lightweight animation and continue action.
+\end{itemize}
+\subsection{Controller Layer}
+\begin{itemize}
+  \item \textbf{AppController:} Loads streams/units, tracks indices, selects graders (Strategy), updates profile (Observer), persists via repository, emits unitCompleted/streamFinished/unitProgress/errors.
+\end{itemize}
+\subsection{Domain Layer}
+\begin{itemize}
+  \item \textbf{Exercises:} MCQ, Translate (character selection), TileOrder, Listen, Speak stub.
+  \item \textbf{Graders (Strategy):} MCQ/Translate/CharacterSelection/TileOrder/Listen/Speak.
+  \item \textbf{Progress:} Profile (Subject/Observer), SkillProgress, SRSScheduler.
+  \item \textbf{Creational:} ExerciseFactory (Factory), AudioManager (Singleton).
+  \item \textbf{Structure:} LearningStream, Unit (vector of unique\_ptr<Exercise>).
+\end{itemize}
+\subsection{Data Layer}
+\begin{itemize}
+  \item \textbf{Repositories:} JsonContentRepository, JsonProfileRepository, SQLiteProfileRepository (schema-ready).
+  \item \textbf{Assets:} Audio files under \texttt{code/assets/audio}; content under \texttt{code/core/data/content.json}.
+\end{itemize}
+
+\section{Data Model and Content Schema}
+\subsection{Content JSON Shape}
+\begin{lstlisting}[language=JSON, caption={Stream/unit content schema (excerpt)}, captionpos=b]
+{
+  "streams": [
+    {
+      "id": "nepali",
+      "name": "Learn Nepali",
+      "language": "Nepali",
+      "units": [
+        {
+          "id": "nepali-greetings-1",
+          "title": "Greetings 1",
+          "exercises": [
+            { "type": "MCQ", "spec": { "id": "...", "prompt": "...",
+                "choices": [...], "correctIndex": 0, "audioPath": "assets/audio/..." }},
+            { "type": "Translate", "spec": { "characterSelection": true,
+                "characterSet": [...], "answers": [...] }},
+            { "type": "TileOrder", "spec": { "tiles": [...], "correctOrder": [...] }}
+          ]
+        }
+      ]
+    }
+  ]
+}
+\end{lstlisting}
+
+\subsection{Profile Persistence}
+\begin{itemize}
+  \item \textbf{JSON:} Stores name, xp, streak, skills (mastery/attempts), completedUnits per stream.
+  \item \textbf{SQLite:} Tables for profile, skill\_progress, unit\_progress (future DB promotion).
+\end{itemize}
+
+\section{Flows and Behavior}
+\subsection{Unit Progression Flow}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item User selects stream/unit (Home/Path); controller loads streams and sets indices.
+  \item LessonView shows exercise; user submits; controller grades (Strategy), updates profile (Observer), plays audio (Singleton).
+  \item After last exercise: controller marks unit complete, persists profile, emits \texttt{unitCompleted}; UI shows dialog and continues on user action.
+  \item Path reflects completion; next unit unlocks; admin override can bypass lock.
+\end{enumerate}
+\subsection{UI Styling and Interactions}
+\begin{itemize}
+  \item LessonView: progress label, click-to-select MCQ, character picker for selection mode, audio button visible when audioPath exists.
+  \item PathView: dual columns (Nepali/Kannada), locked items greyed; admin prompt on locked double-click.
+  \item ProfileView: hardcoded learner “Hardik”; streak/date control for testing.
+  \item Dialog: confetti animation and CTA to continue.
+\end{itemize}
+\subsection{Error Handling and Robustness}
+\begin{itemize}
+  \item Missing content/profile file: controller emits error; UI message box.
+  \item Missing audio file: AudioManager quietly ignores; no crash.
+  \item Bounds checks: controller guards stream/unit/exercise indices and emits errors on invalid state.
+  \item Path locking: enforced by completion; admin override requires password.
+  \item Future: stronger JSON validation, retries, and logging.
+\end{itemize}
+
+\section{Design Patterns (Implemented)}
+\subsection{Factory: \texttt{ExerciseFactory} (Creational)}
+\textbf{Location:} \texttt{code/core/domain/ExerciseFactory.h/cpp}.\\
+\textbf{Why:} Centralizes creation of MCQ, Translate, TileOrder, Listen, Speak from JSON; avoids conditional sprawl; preserves Open/Closed.\\
+\textbf{How:} \texttt{createExercise(type,spec)} dispatches to type-specific builders; supports audio paths, character sets, selection flags.\\
+\textbf{Benefit:} Localized construction, easy extension, tested in isolation.
+
+\noindent\textbf{Snippet:}
+\begin{lstlisting}[caption={Factory dispatch}, captionpos=b]
+Exercise* ExerciseFactory::createExercise(const QString& type,
+                                          const QJsonObject& spec) {
+    if (type == "MCQ") return createMCQ(spec);
+    if (type == "Translate") return createTranslate(spec);
+    if (type == "TileOrder") return createTileOrder(spec);
+    if (type == "Listen") return createListen(spec);
+    if (type == "Speak") return createSpeak(spec);
+    return nullptr;
+}
+\end{lstlisting}
+
+\subsection{Singleton: \texttt{AudioManager} (Creational)}
+\textbf{Location:} \texttt{code/core/domain/AudioManager.h/cpp}.\\
+\textbf{Why:} Single \texttt{QMediaPlayer}/\texttt{QAudioOutput} to avoid resource contention and duplicate init.\\
+\textbf{How:} Meyers singleton; \texttt{playAudio()}, \texttt{playSuccess()}, \texttt{playError()}; deleted copy/move.\\
+\textbf{Benefit:} Controlled audio lifecycle; callable from controller/UI without extra players.
+
+\subsection{Strategy: \texttt{StrategyGrader} Hierarchy (Behavioral)}
+\textbf{Location:} \texttt{code/core/domain/StrategyGrader.h} and concrete graders.\\
+\textbf{Why:} Different grading algorithms per exercise type; keeps Exercise/AppController slim.\\
+\textbf{How:} Abstract \texttt{grade()}; concrete MCQ/Translate/TileOrder/Listen/Speak/CharacterSelection; runtime selection in \texttt{AppController}.\\
+\textbf{Benefit:} Swap/extend grading without touching controllers; unit-tested.
+
+\noindent\textbf{Snippet:}
+\begin{lstlisting}[caption={Runtime strategy selection}, captionpos=b]
+std::unique_ptr<StrategyGrader> AppController::createGraderFor(
+    const Exercise* ex) const {
+    if (ex->type() == "MCQ") return std::make_unique<MCQGrader>();
+    if (ex->type() == "Translate") {
+        auto tr = dynamic_cast<const TranslateExercise*>(ex);
+        if (tr && tr->usesCharacterSelection())
+            return std::make_unique<CharacterSelectionGrader>();
+        return std::make_unique<TranslateGrader>();
+    }
+    if (ex->type() == "TileOrder") return std::make_unique<TileOrderGrader>();
+    if (ex->type() == "Listen") return std::make_unique<ListenGrader>();
+    if (ex->type() == "Speak") return std::make_unique<SpeakGrader>();
+    return nullptr;
+}
+\end{lstlisting}
+
+\subsection{Observer: \texttt{Subject/ProfileObserver} (Behavioral)}
+\textbf{Location:} \texttt{code/core/domain/Subject.h}, \texttt{Profile.h}.\\
+\textbf{Why:} Push XP/streak/skill/unit updates to UI without tight coupling.\\
+\textbf{How:} Profile inherits Subject; ProfileView attaches; notifications on profile changes.\\
+\textbf{Benefit:} UI stays in sync; supports future observers (analytics, badges).
+
+\section{Features and Flows}
+\begin{itemize}
+  \item \textbf{Dual Streams:} Nepali and Kannada, each with structured units of 3 exercises.
+  \item \textbf{Path Tab:} Shows unit status (completed/current/locked); admin override (admin123) to jump ahead.
+  \item \textbf{Unit Completion:} Controller marks completion, persists profile, emits signal; UI shows confetti dialog with “Keep Learning.”
+  \item \textbf{Exercises:} MCQ (click-to-fill), Translate (text or character selection with per-language sets), TileOrder, Listen (audio + MCQ), Speak (stub evaluator).
+  \item \textbf{Audio:} Centralized via \texttt{AudioManager}; plays success/error and exercise audio paths.
+  \item \textbf{Profile:} Tracks XP, streak, skills, and completed units per stream; date advancement button for streak testing (UI).
+\end{itemize}
+
+\subsection{Unit Progression Flow}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item User selects stream/unit (Home or Path). Controller loads stream and sets unit/exercise index.
+  \item LessonView shows exercise; user submits answer; controller grades via Strategy.
+  \item Profile updated (XP, streak, skill attempt); profile persisted.
+  \item After final exercise in unit: controller marks unit complete, emits \texttt{unitCompleted}; UI shows dialog and continues on user request.
+  \item Path reflects completed unit; next unit unlocks (or admin override bypasses lock).
+\end{enumerate}
+
+\section{Testing}
+\subsection{Setup}
+\begin{itemize}
+  \item Vendored googletest/gmock at \texttt{code/tests/googletest}.
+  \item Build: \texttt{cd code/tests \&\& qmake tests.pro \&\& make \&\& ./bhashaquest\_tests}.
+  \item Tests target core only (no UI).
+\end{itemize}
+
+\subsection{Coverage}
+\begin{itemize}
+  \item ExerciseFactory: creation of MCQ/Translate/TileOrder/Listen/Speak; audio/character sets; unknown type returns null.
+  \item Graders: MCQ/Translate/CharacterSelection/TileOrder/Listen/Speak stub correctness paths.
+  \item SRSScheduler: Easy/Medium/Hard intervals.
+  \item Profile: XP, streak reset, unit completion tracking.
+  \item JsonContentRepository: loads streams/units from fixture; missing file error handling.
+\end{itemize}
+
+\subsection{Summary Table}
+\begin{center}
+\begin{tabular}{|p{0.33\linewidth}|p{0.55\linewidth}|}
+\hline
+\textbf{Suite} & \textbf{Focus} \\\hline
+ExerciseFactory & Type dispatch; audio/character specs; unknown types \\\hline
+Graders & MCQ/Translate/CharacterSelection/TileOrder/Listen/Speak correctness \\\hline
+SRSScheduler & Interval calculation (Easy/Medium/Hard) \\\hline
+Profile & XP/streak updates; unit completion map \\\hline
+ContentRepository & Streams/units load; missing file error path \\\hline
+Controller (planned) & Signal flow with gmock repos; malformed content \\\hline
+\end{tabular}
+\end{center}
+
+\subsection{Gaps / Next Tests}
+Controller signal flow with mocks; edge cases for malformed content; more exhaustive speak/listen scoring cases; profile persistence round-trip.
+
+\subsection{Execution (Qt Creator AutoTest)}
+\begin{itemize}
+  \item Open \texttt{code/tests/tests.pro}; build target \texttt{bhashaquest\_tests}.
+  \item Run via AutoTest pane (GoogleTest framework enabled) or CLI as above.
+  \item All current tests pass on latest build; no known flakiness.
+\end{itemize}
+
+\subsection{gMock Example}
+Mocking \texttt{IContentRepository} to validate controller startup:
+\begin{lstlisting}[caption={EXPECT\_CALL example}, captionpos=b]
+class MockContentRepo : public IContentRepository {
+public:
+    MOCK_METHOD(std::vector<LearningStream>, loadStreams, (QString*), (override));
+};
+
+TEST(ControllerTest, StartsStreamWithMockRepo) {
+    MockContentRepo repo;
+    JsonProfileRepository profileRepo(":/tmp/profile.json");
+    AppController controller(&repo, &profileRepo);
+    std::vector<LearningStream> streams;
+    LearningStream s("s1", "Stream 1", "L");
+    Unit u("u1", "Unit 1");
+    u.addExercise(std::make_unique<MCQExercise>("e1","p",{ "a","b" },0));
+    s.addUnit(std::move(u));
+    streams.push_back(std::move(s));
+
+    EXPECT_CALL(repo, loadStreams(testing::_))
+        .WillOnce(testing::Return(streams));
+
+    controller.initialize();
+    ASSERT_TRUE(controller.startStream("s1"));
+    EXPECT_NE(controller.currentExercise(), nullptr);
+}
+\end{lstlisting}
+
+\subsection{Test Results Summary}
+Latest run: all added tests pass (factory, graders, scheduler, profile, repository). No intermittent failures observed. Next priority is adding controller signal tests with gmock.
+
+\section{Error Handling}
+\begin{itemize}
+  \item Repo load/save errors surfaced via controller signal; UI shows message box.
+  \item Missing audio: \texttt{AudioManager} no-ops if file absent.
+  \item Path locking: enforces sequential units; admin override allowed via password.
+  \item Controller guards: checks bounds on stream/unit/exercise indices and emits errors on invalid state.
+  \item Content assumptions: minimal validation; future work includes stricter JSON schema and fallback defaults.
+\end{itemize}
+Future: richer error messages, retries, and logging.
+
+\section{Architecture Diagrams}
+The diagrams below are aligned with the current codebase and highlight layer boundaries, pattern placements, and orchestration paths.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{class_diagram_updated.png}
+  \caption{Class diagram showing strict UI $\rightarrow$ Controller $\rightarrow$ Domain $\rightarrow$ Data layering, Factory/Strategy/Singleton placements, and new Path/unit constructs.}
+  \label{fig:class}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{sequence_diagram_updated.png}
+  \caption{Sequence diagram for a complete exercise submission through unit completion, including controller orchestration and audio/feedback.}
+  \label{fig:sequence}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.92\textwidth]{usecase.png}
+  \caption{Use case diagram covering learner paths (Nepali/Kannada), admin override, profile viewing, and unit completion celebration.}
+  \label{fig:usecase}
+\end{figure}
+
+\section{Reflection}
+The layered architecture and pattern choices made adding streams/units and new exercise types straightforward. Strategy kept grading isolated; Factory simplified content loading; Observer kept UI in sync. The main risks are limited UI error coverage and partial test scope; extending gmock-based controller tests and adding persistence round-trips would further strengthen robustness. The dual-stream structure demonstrates extensibility for additional languages. Lessons learned:
+\begin{itemize}
+  \item Early pattern placement pays off—adding Listen/Speak and units required minimal controller churn.
+  \item Data-driven content (JSON) simplified expansion and per-language character sets.
+  \item Testing is effective but should move closer to controller/mocking for stronger guarantees.
+  \item UI resilience (better error surfaces, loading states) would improve robustness; current error handling is minimal.
+  \item Documentation cadence matters: keeping diagrams/code in sync early prevents churn late.
+  \item Balancing scope vs. robustness: choosing a stub for Speak kept scope feasible; future iterations should harden audio capture and error handling.
+\end{itemize}
+
+\section{Future Work}
+\begin{itemize}
+  \item Replace Speak stub with real audio capture + ASR integration; richer Listen content.
+  \item Expand tests with gmock for controller/repo interactions and malformed content coverage.
+  \item Promote SQLite persistence to primary backend; add migrations and history tables.
+  \item Improve Path/Unit UX (summaries, streak indicators) and enhance error feedback.
+  \item Automate diagram updates (PlantUML) and integrate test coverage reports.
+\end{itemize}
+
+\section{Conclusion}
+The final system delivers dual-language learning with structured units, clear progression via the Path tab, and integrated patterns (Factory, Singleton, Strategy, Observer) underpinning a layered architecture. Core logic is covered by GoogleTest; the design is extensible for additional languages, deeper audio, and stronger persistence while preserving clean separation of concerns.
+
+\end{document}

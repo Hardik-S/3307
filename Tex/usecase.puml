@@ -1,0 +1,29 @@
+@startuml
+left to right direction
+actor Learner
+actor Admin as Admin
+
+rectangle "Bhasha Quest" {
+  usecase "Select Stream (Nepali/Kannada)" as UC1
+  usecase "View Path (Units)" as UC2
+  usecase "Start Unit" as UC3
+  usecase "Complete Exercises" as UC4
+  usecase "View Progress (XP/Streak/Units)" as UC5
+  usecase "Play Exercise Audio" as UC6
+  usecase "Admin Override (Unlock Unit)" as UC7
+}
+
+Learner --> UC1
+Learner --> UC2
+Learner --> UC3
+Learner --> UC4
+Learner --> UC5
+Learner --> UC6
+
+Admin --> UC7
+UC7 .> UC3 : unlocks
+UC4 .> UC6 : <<include>>
+UC3 .> UC4 : <<include>>
+UC2 .> UC3 : <<extend>> start
+
+@enduml
