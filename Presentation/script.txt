@@ -1,0 +1,39 @@
+Slide 1 — Title  
+“Welcome! This is Bhasha Quest, a dual-language learning app for Nepali and Kannada. In the next eight minutes I’ll cover the architecture, design patterns, key features, data model, testing, and what’s next.”
+
+Slide 2 — Goals & Requirements  
+“Our goals were clear: two parallel streams (Nepali and Kannada), units of exactly three exercises, and a Path tab that shows completed, current, and locked units. We added an admin override (password admin123) for instructors and demos. We support audio, MCQ click-to-fill, a character picker, and we track XP, streaks, and skills. The Profile view includes a date control for quick streak testing.”
+
+Slide 3 — Layered Architecture  
+“We use strict layered MVC: UI → Controller → Domain → Data. The controller orchestrates grading, progress updates, and persistence. Repositories abstract storage: JSON today, with a SQLite profile repository ready behind the same interface. Signals and slots decouple UI from domain; the domain never touches widgets. Error handling: missing content/profile emit errors; missing audio is safely ignored; bounds checks protect stream, unit, and exercise indices.”
+
+Slide 4 — Unit Progression Flow  
+“Here’s the flow. Pick a stream and unit from Home or Path. LessonView shows the exercise. When the learner submits, the controller chooses a Strategy grader, computes the result, updates XP/streak/skills, and persists the profile. On the third exercise, we emit a unitCompleted signal, show a confetti dialog, and continue to the next unit.”
+
+Slide 5 — Design Patterns In Use  
+“Patterns are in active use. Factory: ExerciseFactory builds MCQ, Translate, TileOrder, Listen, Speak from JSON, keeping construction open/closed. Singleton: AudioManager owns the single media player and output. Strategy: graders are chosen at runtime; adding CharacterSelection or Listen didn’t require controller rewrites. Observer: Profile is a Subject; ProfileView subscribes to stay in sync. These aren’t theoretical—they drive the code paths you’ll see.”
+
+Slide 6 — Features: Home & Path  
+“Home shows the two streams. The Path tab shows completed, current, and locked units with coloring. Double-clicking a locked unit prompts for the admin override (admin123) to jump ahead. This supports demos and instructors without breaking progression logic.”
+
+Slide 7 — Features: Lesson  
+“In LessonView, MCQ click-to-fill reduces typing; the character picker handles script answers; an audio button appears when audioPath exists; and a progress label shows where you are in the three-exercise unit. It’s all data-driven from JSON and centralized audio.”
+
+Slide 8 — Features: Unit Completion  
+“Finishing the third exercise triggers a confetti animation and a ‘Keep Learning’ call-to-action. The controller emits unitCompleted, and the UI advances smoothly to the next unit.”
+
+Slide 9 — Features: Profile  
+“ProfileView shows learner Hardik, XP, and streak, plus a skills list. The +1 day button increments date and streak for demo/testing. Observer keeps the view synced to Profile changes.”
+
+Slide 10 — Content & Data  
+“Content is data-driven: streams → units (exactly three exercises) → specs in JSON. Per-language character sets and audio paths live under code/assets/audio. The SQLite profile repository sits behind the same interface, ready to be promoted later.”
+
+Slide 11 — Testing & Quality (include live run)  
+“We vendored gtest/gmock; the build target is bhashaquest_tests. We cover Factory creation paths, graders (MCQ/Translate/CharacterSelection/TileOrder/Listen/Speak), SRSScheduler intervals, Profile XP/streak/unit completion, and JsonContentRepository load/error handling. Planned next: controller signal tests with mocks.  
+Let me show the run in Qt Creator: open code/tests/tests.pro, build the target bhashaquest_tests, open the AutoTest pane, select GoogleTest, run all—you should see a clean green run. This keeps tests close to the code and repeatable.”
+
+Slide 12 — Results & Reflection  
+“Patterns made adding new exercise types and streams straightforward. Trade-offs: Speak is stubbed; SQLite isn’t the primary backend yet. Next steps: real ASR for Speak, promote SQLite, richer Path UX, and more gmock coverage on controller startup/error paths.”
+
+Slide 13 — Thank You  
+“That’s Bhasha Quest: dual streams, structured units, and tested core logic. Happy to demo Path locking and override, a full unit completion with confetti, or the streak increment in Profile. Questions?” 
